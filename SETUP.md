@@ -87,6 +87,133 @@ Activiti 5: einfach das Terminal-Fenster schliessen oder `Ctrl+C`.
 
 ---
 
+## REST API – Beispiele
+
+Alle Beispiele gegen Activiti 5 (Port 9091). Fuer Activiti 6 einfach `9091` durch `9090` ersetzen.
+Authentifizierung immer mit `kermit:kermit`.
+
+### Deployments
+
+```bash
+# Alle Deployments auflisten
+curl -u kermit:kermit http://localhost:9091/activiti-rest/service/repository/deployments
+
+# BPMN deployen (z.B. CteAutomatedTestProcess.bpmn)
+curl -u kermit:kermit -X POST \
+  -F "file=@CteAutomatedTestProcess.bpmn" \
+  http://localhost:9091/activiti-rest/service/repository/deployments
+
+# Deployment loeschen (cascade=true entfernt auch laufende Prozesse)
+curl -u kermit:kermit -X DELETE \
+  "http://localhost:9091/activiti-rest/service/repository/deployments/1234?cascade=true"
+```
+
+### Prozess-Definitionen
+
+```bash
+# Alle Prozess-Definitionen auflisten
+curl -u kermit:kermit http://localhost:9091/activiti-rest/service/repository/process-definitions
+
+# Prozess-Definitionen nach Key filtern
+curl -u kermit:kermit \
+  "http://localhost:9091/activiti-rest/service/repository/process-definitions?key=ENE-TestAutomationProcess"
+```
+
+### Prozess-Instanzen starten und abfragen
+
+```bash
+# Prozess starten (mit Variablen)
+curl -u kermit:kermit -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "processDefinitionKey": "ENE-TestAutomationProcess",
+    "variables": [
+      {"name": "MEIN_KEY",   "value": "meinSchluessel"},
+      {"name": "TEST_TYPE",  "value": "PHASE1_AND_PHASE2"}
+    ]
+  }' \
+  http://localhost:9091/activiti-rest/service/runtime/process-instances
+
+# Alle laufenden Prozesse auflisten
+curl -u kermit:kermit http://localhost:9091/activiti-rest/service/runtime/process-instances
+
+# Prozess-Variablen lesen
+curl -u kermit:kermit \
+  http://localhost:9091/activiti-rest/service/runtime/process-instances/1234/variables
+
+# Prozess beenden (loeschen)
+curl -u kermit:kermit -X DELETE \
+  http://localhost:9091/activiti-rest/service/runtime/process-instances/1234
+```
+
+### Tasks
+
+```bash
+# Alle offenen Tasks auflisten
+curl -u kermit:kermit http://localhost:9091/activiti-rest/service/runtime/tasks
+
+# Tasks mit Prozess-Variablen abfragen (POST query)
+curl -u kermit:kermit -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "includeProcessVariables": true,
+    "includeTaskLocalVariables": true,
+    "processInstanceVariables": [
+      {"name": "MEIN_KEY", "value": "meinSchluessel", "operation": "equals", "type": "string"}
+    ]
+  }' \
+  http://localhost:9091/activiti-rest/service/query/tasks
+
+# Task claimen (einem User zuweisen)
+curl -u kermit:kermit -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"action": "claim", "assignee": "kermit"}' \
+  http://localhost:9091/activiti-rest/service/runtime/tasks/5678
+
+# Task abschliessen (mit Variablen)
+curl -u kermit:kermit -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "action": "complete",
+    "variables": [
+      {"name": "TIME_BEFORE_NEXT_TASTK", "value": "PT1S"}
+    ]
+  }' \
+  http://localhost:9091/activiti-rest/service/runtime/tasks/5678
+
+# Task-lokale Variablen lesen
+curl -u kermit:kermit \
+  http://localhost:9091/activiti-rest/service/runtime/tasks/5678/variables
+```
+
+### Historische Daten
+
+```bash
+# Abgeschlossene Prozesse auflisten
+curl -u kermit:kermit \
+  "http://localhost:9091/activiti-rest/service/history/historic-process-instances?size=50&order=desc&sort=processInstanceId"
+
+# Verlauf eines Prozesses (alle Aktivitaeten)
+curl -u kermit:kermit \
+  "http://localhost:9091/activiti-rest/service/history/historic-activity-instances?processInstanceId=1234&sort=startTime&order=asc"
+
+# Historische Variablen eines Prozesses
+curl -u kermit:kermit \
+  "http://localhost:9091/activiti-rest/service/history/historic-variable-instances?processInstanceId=1234"
+```
+
+### Signal senden
+
+```bash
+# Globales Signal an alle Prozesse mit diesem Signal-Namen
+curl -u kermit:kermit -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"signalName": "ENE-cancelProcessSignal"}' \
+  http://localhost:9091/activiti-rest/service/runtime/signals
+```
+
+---
+
 ## Maven-Build
 
 Tests laufen gegen Activiti 6 (Port 9090) oder Activiti 5 (Port 9091),
