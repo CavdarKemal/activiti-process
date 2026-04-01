@@ -5,15 +5,12 @@ import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 import static de.creditreform.crefoteam.activiti.ActivitiJunitConstants.*;
 
 public class CteActivitiUtilsTest extends TestCase {
-    protected final Logger LOGGER = LoggerFactory.getLogger(CteActivitiUtilsTest.class);
     protected CteActivitiUtils cteActivitiUtils;
     CteActivitiService cteActivitiServiceREST;
 
