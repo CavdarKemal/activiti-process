@@ -1,0 +1,10 @@
+/.idea/
+/target/
+/activiti-process.iml
+*.log
+/.metadata/
+/import/
+/apache-tomcat*/
+/jdk-*/
+/.claude/
+*.tar

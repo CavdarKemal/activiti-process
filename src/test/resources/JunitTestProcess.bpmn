@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <signal id="testSignal0" name="testSignal0" activiti:scope="global"></signal>
+  <signal id="testSignal1" name="testSignal1" activiti:scope="global"></signal>
+  <signal id="testSignal2" name="testSignal2" activiti:scope="global"></signal>
+  <process id="JUNIT-TEST" name="Junit-Test-Process" isExecutable="true">
+    <startEvent id="startEvent" name="Start" activiti:initiator="initiator"></startEvent>
+    <sequenceFlow id="flowToTaskCopyRefFilesToSoll" sourceRef="startEvent" targetRef="UserTask0"></sequenceFlow>
+    <userTask id="UserTask0" name="UserTask #0">
+      <extensionElements>
+        <activiti:formProperty id="signalType" name="Signal Type" type="enum" variable="signalType" required="true">
+          <activiti:value id="signalType0" name="Signal Type 0"></activiti:value>
+          <activiti:value id="signalType1" name="Signal Type 1"></activiti:value>
+          <activiti:value id="signalType2" name="Signal Type 2"></activiti:value>
+        </activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <intermediateThrowEvent id="SignalIntermediateThrowEvent1" name="SignalThrowEvent #1">
+      <signalEventDefinition signalRef="testSignal0"></signalEventDefinition>
+    </intermediateThrowEvent>
+    <sequenceFlow id="flow2" sourceRef="UserTask0" targetRef="exclusivegateway1"></sequenceFlow>
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow4" sourceRef="exclusivegateway1" targetRef="SignalIntermediateThrowEvent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${signalType == "signalType0"}]]></conditionExpression>
+    </sequenceFlow>
+    <intermediateThrowEvent id="SignalIntermediateThrowEvent2" name="SignalThrowEvent #2">
+      <signalEventDefinition signalRef="testSignal1"></signalEventDefinition>
+    </intermediateThrowEvent>
+    <intermediateThrowEvent id="SignalIntermediateThrowEvent3" name="SignalThrowEvent #3">
+      <signalEventDefinition signalRef="testSignal2"></signalEventDefinition>
+    </intermediateThrowEvent>
+    <sequenceFlow id="flow5" sourceRef="exclusivegateway1" targetRef="SignalIntermediateThrowEvent3">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${signalType == "signalType2"}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="exclusivegateway1" targetRef="SignalIntermediateThrowEvent2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${signalType == "signalType1"}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow7" sourceRef="SignalIntermediateThrowEvent3" targetRef="UserTask2.0"></sequenceFlow>
+    <sequenceFlow id="flow8" sourceRef="SignalIntermediateThrowEvent2" targetRef="UserTask1.0"></sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="SignalIntermediateThrowEvent1" targetRef="UserTask0.0"></sequenceFlow>
+    <serviceTask id="mailtask1" name="Mail Task" activiti:type="mail">
+      <extensionElements>
+        <activiti:field name="to">
+          <activiti:string><![CDATA[k.cavdar@activiti-tester.de]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="from">
+          <activiti:string><![CDATA[junit@activiti-tester.de]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="subject">
+          <activiti:string><![CDATA[JUNITTest]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="text">
+          <activiti:expression><![CDATA[Mail from Signal ${signalType}]]></activiti:expression>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow10" sourceRef="mailtask1" targetRef="endevent1"></sequenceFlow>
+    <userTask id="UserTask0.0" name="UserTask #0#0">
+      <extensionElements>
+        <activiti:formProperty id="signalType" name="Signal Type" type="enum" variable="signalType" required="true">
+          <activiti:value id="signalType1" name="Signal Type 1"></activiti:value>
+          <activiti:value id="signalType2" name="Signal Type 2"></activiti:value>
+          <activiti:value id="signalType3" name="Signal Type 3"></activiti:value>
+        </activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <userTask id="UserTask0.1" name="UserTask #0#1">
+      <extensionElements>
+        <activiti:formProperty id="signalType" name="Signal Type" type="enum" variable="signalType" required="true">
+          <activiti:value id="signalType1" name="Signal Type 1"></activiti:value>
+          <activiti:value id="signalType2" name="Signal Type 2"></activiti:value>
+          <activiti:value id="signalType3" name="Signal Type 3"></activiti:value>
+        </activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow11" sourceRef="UserTask0.0" targetRef="UserTask0.1"></sequenceFlow>
+    <sequenceFlow id="flow12" sourceRef="UserTask0.1" targetRef="UserTask0.2"></sequenceFlow>
+    <userTask id="UserTask1.0" name="UserTask #1#0">
+      <extensionElements>
+        <activiti:formProperty id="signalType" name="Signal Type" type="enum" variable="signalType" required="true">
+          <activiti:value id="signalType1" name="Signal Type 1"></activiti:value>
+          <activiti:value id="signalType2" name="Signal Type 2"></activiti:value>
+          <activiti:value id="signalType3" name="Signal Type 3"></activiti:value>
+        </activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow13" sourceRef="UserTask1.0" targetRef="UserTask1.1"></sequenceFlow>
+    <userTask id="UserTask0.2" name="UserTask #0#2">
+      <extensionElements>
+        <activiti:formProperty id="signalType" name="Signal Type" type="enum" variable="signalType" required="true">
+          <activiti:value id="signalType1" name="Signal Type 1"></activiti:value>
+          <activiti:value id="signalType2" name="Signal Type 2"></activiti:value>
+          <activiti:value id="signalType3" name="Signal Type 3"></activiti:value>
+        </activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow14" sourceRef="UserTask0.2" targetRef="mailtask1"></sequenceFlow>
+    <userTask id="UserTask1.1" name="UserTask #1#1">
+      <extensionElements>
+        <activiti:formProperty id="signalType" name="Signal Type" type="enum" variable="signalType" required="true">
+          <activiti:value id="signalType1" name="Signal Type 1"></activiti:value>
+          <activiti:value id="signalType2" name="Signal Type 2"></activiti:value>
+          <activiti:value id="signalType3" name="Signal Type 3"></activiti:value>
+        </activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow15" sourceRef="UserTask1.1" targetRef="mailtask1"></sequenceFlow>
+    <userTask id="UserTask2.0" name="UserTask #2#0">
+      <extensionElements>
+        <activiti:formProperty id="signalType" name="Signal Type" type="enum" variable="signalType" required="true">
+          <activiti:value id="signalType1" name="Signal Type 1"></activiti:value>
+          <activiti:value id="signalType2" name="Signal Type 2"></activiti:value>
+          <activiti:value id="signalType3" name="Signal Type 3"></activiti:value>
+        </activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow16" sourceRef="UserTask2.0" targetRef="mailtask1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_JUNIT-TEST">
+    <bpmndi:BPMNPlane bpmnElement="JUNIT-TEST" id="BPMNPlane_JUNIT-TEST">
+      <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="56.0" y="163.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask0" id="BPMNShape_UserTask0">
+        <omgdc:Bounds height="55.0" width="105.0" x="130.0" y="153.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SignalIntermediateThrowEvent1" id="BPMNShape_SignalIntermediateThrowEvent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="364.0" y="50.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="269.0" y="160.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SignalIntermediateThrowEvent2" id="BPMNShape_SignalIntermediateThrowEvent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="364.0" y="163.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="SignalIntermediateThrowEvent3" id="BPMNShape_SignalIntermediateThrowEvent3">
+        <omgdc:Bounds height="35.0" width="35.0" x="364.0" y="277.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="1010.0" y="163.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mailtask1" id="BPMNShape_mailtask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="866.0" y="153.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask0.0" id="BPMNShape_UserTask0.0">
+        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="40.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask0.1" id="BPMNShape_UserTask0.1">
+        <omgdc:Bounds height="55.0" width="105.0" x="610.0" y="40.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask1.0" id="BPMNShape_UserTask1.0">
+        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="153.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask0.2" id="BPMNShape_UserTask0.2">
+        <omgdc:Bounds height="55.0" width="105.0" x="760.0" y="40.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask1.1" id="BPMNShape_UserTask1.1">
+        <omgdc:Bounds height="55.0" width="105.0" x="610.0" y="153.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask2.0" id="BPMNShape_UserTask2.0">
+        <omgdc:Bounds height="55.0" width="105.0" x="470.0" y="267.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flowToTaskCopyRefFilesToSoll" id="BPMNEdge_flowToTaskCopyRefFilesToSoll">
+        <omgdi:waypoint x="91.0" y="180.0"></omgdi:waypoint>
+        <omgdi:waypoint x="130.0" y="180.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="235.0" y="180.0"></omgdi:waypoint>
+        <omgdi:waypoint x="269.0" y="180.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="289.0" y="160.0"></omgdi:waypoint>
+        <omgdi:waypoint x="288.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="364.0" y="67.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="289.0" y="200.0"></omgdi:waypoint>
+        <omgdi:waypoint x="289.0" y="294.0"></omgdi:waypoint>
+        <omgdi:waypoint x="364.0" y="294.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="309.0" y="180.0"></omgdi:waypoint>
+        <omgdi:waypoint x="364.0" y="180.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="399.0" y="294.0"></omgdi:waypoint>
+        <omgdi:waypoint x="470.0" y="294.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="399.0" y="180.0"></omgdi:waypoint>
+        <omgdi:waypoint x="470.0" y="180.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="399.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="470.0" y="67.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="971.0" y="180.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1010.0" y="180.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="575.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="610.0" y="67.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="715.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="760.0" y="67.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="575.0" y="180.0"></omgdi:waypoint>
+        <omgdi:waypoint x="610.0" y="180.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="865.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="918.0" y="67.0"></omgdi:waypoint>
+        <omgdi:waypoint x="918.0" y="153.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+        <omgdi:waypoint x="715.0" y="180.0"></omgdi:waypoint>
+        <omgdi:waypoint x="866.0" y="180.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="575.0" y="294.0"></omgdi:waypoint>
+        <omgdi:waypoint x="918.0" y="294.0"></omgdi:waypoint>
+        <omgdi:waypoint x="918.0" y="208.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

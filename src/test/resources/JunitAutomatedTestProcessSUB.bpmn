@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="JUnitCallActivityRTSubProcess" name="JUNIT ENE-Test-Automatisierung-SUB" isExecutable="true">
+    <startEvent id="startEvent" name="Start" activiti:initiator="initiator"></startEvent>
+    <endEvent id="endEvent" name="End"></endEvent>
+    <userTask id="UserTaskStartCollect" name="Exporte sammeln [StartCollect]"></userTask>
+    <userTask id="UserTaskStartExports" name="Exports starten [StartExports]"></userTask>
+    <userTask id="UserTaskStartUploads" name="Upload starten [StartUploads]"></userTask>
+    <sequenceFlow id="flowToUserTaskWaitForExports" sourceRef="UserTaskStartExports" targetRef="UserTaskWaitForExports"></sequenceFlow>
+    <userTask id="UserTaskWaitForExports" name="Export-Ende abwarten [WaitForExports]"></userTask>
+    <sequenceFlow id="flowToUserTaskStartCollect" sourceRef="UserTaskWaitForExports" targetRef="UserTaskStartCollect"></sequenceFlow>
+    <sequenceFlow id="flow7" sourceRef="startEvent" targetRef="UserTaskStartUploads"></sequenceFlow>
+    <sequenceFlow id="flow8" sourceRef="UserTaskStartCollect" targetRef="endEvent"></sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="UserTaskStartUploads" targetRef="UserTaskStartExports"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_JUnitCallActivityRTSubProcess">
+    <bpmndi:BPMNPlane bpmnElement="JUnitCallActivityRTSubProcess" id="BPMNPlane_JUnitCallActivityRTSubProcess">
+      <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="58.0" y="160.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endEvent" id="BPMNShape_endEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="58.0" y="301.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartCollect" id="BPMNShape_UserTaskStartCollect">
+        <omgdc:Bounds height="70.0" width="140.0" x="126.0" y="283.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartExports" id="BPMNShape_UserTaskStartExports">
+        <omgdc:Bounds height="70.0" width="140.0" x="400.0" y="143.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartUploads" id="BPMNShape_UserTaskStartUploads">
+        <omgdc:Bounds height="70.0" width="140.0" x="124.0" y="143.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskWaitForExports" id="BPMNShape_UserTaskWaitForExports">
+        <omgdc:Bounds height="70.0" width="140.0" x="400.0" y="283.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flowToUserTaskWaitForExports" id="BPMNEdge_flowToUserTaskWaitForExports">
+        <omgdi:waypoint x="470.0" y="213.0"></omgdi:waypoint>
+        <omgdi:waypoint x="470.0" y="283.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowToUserTaskStartCollect" id="BPMNEdge_flowToUserTaskStartCollect">
+        <omgdi:waypoint x="400.0" y="318.0"></omgdi:waypoint>
+        <omgdi:waypoint x="266.0" y="318.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="93.0" y="177.0"></omgdi:waypoint>
+        <omgdi:waypoint x="124.0" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="126.0" y="318.0"></omgdi:waypoint>
+        <omgdi:waypoint x="93.0" y="318.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="264.0" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="400.0" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

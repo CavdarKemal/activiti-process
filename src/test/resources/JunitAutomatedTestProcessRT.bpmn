@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test" id="m1500535521344" name="">
+  <process id="JunitAutomatedTestProcessRT" name="JunitAutomatedTestProcessRT" isExecutable="true" isClosed="false" processType="None">
+    <startEvent id="startEvent" name="Start" activiti:initiator="initiator"></startEvent>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <userTask id="UserTaskCpyStgABDocs2Output" name="Kopiere TestfÃ¤lleACB30  [UT-CpyStgABDocs2Output]"></userTask>
+    <userTask id="UserTaskStartGenerates" name="Generate starten [UT-StartGenerates]"></userTask>
+    <userTask id="UserTaskStartUploads" name="Upload starten [UT-StartUploads]"></userTask>
+    <userTask id="UserTaskStartCheck" name="Check starten [UT-StartCheck]"></userTask>
+    <userTask id="UserTaskAnalyseChecks" name="Checks analysieren [UT-AnalyseChecks]"></userTask>
+    <sequenceFlow id="flow76" sourceRef="UserTaskStartGenerates" targetRef="UserTaskStartUploads"></sequenceFlow>
+    <sequenceFlow id="flow88" sourceRef="UserTaskStartCheck" targetRef="UserTaskAnalyseChecks"></sequenceFlow>
+    <sequenceFlow id="flow96" sourceRef="UserTaskAnalyseChecks" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="flow99" sourceRef="UserTaskCpyStgABDocs2Output" targetRef="UserTaskStartGenerates"></sequenceFlow>
+    <sequenceFlow id="flow100" sourceRef="startEvent" targetRef="UserTaskCpyStgABDocs2Output"></sequenceFlow>
+    <sequenceFlow id="flow103" sourceRef="UserTaskStartUploads" targetRef="UserTaskStartCheck"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_JunitAutomatedTestProcessRT">
+    <bpmndi:BPMNPlane bpmnElement="JunitAutomatedTestProcessRT" id="BPMNPlane_JunitAutomatedTestProcessRT">
+      <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="26.0" y="59.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="25.0" y="295.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskCpyStgABDocs2Output" id="BPMNShape_UserTaskCpyStgABDocs2Output">
+        <omgdc:Bounds height="78.0" width="141.0" x="100.0" y="38.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartGenerates" id="BPMNShape_UserTaskStartGenerates">
+        <omgdc:Bounds height="67.0" width="113.0" x="283.0" y="43.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartUploads" id="BPMNShape_UserTaskStartUploads">
+        <omgdc:Bounds height="67.0" width="105.0" x="450.0" y="43.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartCheck" id="BPMNShape_UserTaskStartCheck">
+        <omgdc:Bounds height="67.0" width="131.0" x="437.0" y="279.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskAnalyseChecks" id="BPMNShape_UserTaskAnalyseChecks">
+        <omgdc:Bounds height="67.0" width="113.0" x="120.0" y="279.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow76" id="BPMNEdge_flow76">
+        <omgdi:waypoint x="396.0" y="76.0"></omgdi:waypoint>
+        <omgdi:waypoint x="450.0" y="76.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow88" id="BPMNEdge_flow88">
+        <omgdi:waypoint x="437.0" y="312.0"></omgdi:waypoint>
+        <omgdi:waypoint x="233.0" y="312.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow96" id="BPMNEdge_flow96">
+        <omgdi:waypoint x="120.0" y="312.0"></omgdi:waypoint>
+        <omgdi:waypoint x="60.0" y="312.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow99" id="BPMNEdge_flow99">
+        <omgdi:waypoint x="241.0" y="77.0"></omgdi:waypoint>
+        <omgdi:waypoint x="283.0" y="76.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow100" id="BPMNEdge_flow100">
+        <omgdi:waypoint x="61.0" y="76.0"></omgdi:waypoint>
+        <omgdi:waypoint x="100.0" y="77.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow103" id="BPMNEdge_flow103">
+        <omgdi:waypoint x="502.0" y="110.0"></omgdi:waypoint>
+        <omgdi:waypoint x="502.0" y="279.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

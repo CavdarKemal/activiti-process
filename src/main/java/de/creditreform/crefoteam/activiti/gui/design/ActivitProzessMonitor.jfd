@@ -1,0 +1,116 @@
+JFDML JFormDesigner: "8.3" encoding: "UTF-8"
+
+new FormModel {
+	"i18n.autoExternalize": true
+	"i18n.bundlePackage": "de.cavdar.gui.design"
+	"i18n.bundleName": "form"
+	"i18n.keyPrefix": "ActivitProzessMonitor"
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			auxiliary() {
+				"JavaCodeGenerator.variableGetter": true
+			}
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0, 0:1.0, 0, 0:1.0, 0"
+				"$rowSpecs": "0, 0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panelProcessControls"
+				"border": new javax.swing.border.EtchedBorder( 1, null, null )
+				auxiliary() {
+					"JavaCodeGenerator.variableGetter": true
+				}
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelEnvironment"
+					"text": "Umgebung:"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBoxEnvironment"
+					auxiliary() {
+						"JavaCodeGenerator.variableGetter": true
+					}
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"insets": new java.awt.Insets( 2, 2, 2, 2 )
+					"gridx": 1
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelActivitiHost"
+					"text": new FormMessage( null, "ActivitProzessMonitor.labelActivitiHost.text" )
+					auxiliary() {
+						"JavaCodeGenerator.variableGetter": true
+					}
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"insets": new java.awt.Insets( 2, 2, 2, 2 )
+					"gridx": 2
+				} )
+				add( new FormComponent( "javax.swing.JComboBox" ) {
+					name: "comboBoxActivitiHost"
+					auxiliary() {
+						"JavaCodeGenerator.variableGetter": true
+					}
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"insets": new java.awt.Insets( 2, 2, 2, 2 )
+					"gridx": 3
+					"gridwidth": 2
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "buttonStartProcess"
+					"text": new FormMessage( null, "ActivitProzessMonitor.buttonStartProcess.text" )
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/icons/gear_run.png" )
+					"minimumSize": new java.awt.Dimension( 80, 24 )
+					"maximumSize": new java.awt.Dimension( 120, 24 )
+					"preferredSize": new java.awt.Dimension( 80, 24 )
+					auxiliary() {
+						"JavaCodeGenerator.variableGetter": true
+					}
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"insets": new java.awt.Insets( 2, 2, 2, 2 )
+					"gridy": 1
+					"gridwidth": 4
+				} )
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "buttonStopUserTasksThread"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/icons/Stop sign.png" )
+					"actionCommand": new FormMessage( null, "ActivitProzessMonitor.buttonStopUserTasksThread.actionCommand" )
+					"toolTipText": new FormMessage( null, "ActivitProzessMonitor.buttonStopUserTasksThread.toolTipText" )
+					"minimumSize": new java.awt.Dimension( 24, 24 )
+					"maximumSize": new java.awt.Dimension( 24, 24 )
+					"preferredSize": new java.awt.Dimension( 24, 24 )
+					auxiliary() {
+						"JavaCodeGenerator.variableGetter": true
+					}
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"insets": new java.awt.Insets( 2, 2, 2, 2 )
+					"gridx": 4
+					"gridy": 1
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "North"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0, 0"
+				"$rowSpecs": "0, 0, 0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panelProcessMonitor"
+				"border": new javax.swing.border.EtchedBorder( 1, null, null )
+				auxiliary() {
+					"JavaCodeGenerator.variableGetter": true
+				}
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 710, 300 )
+		} )
+	}
+}

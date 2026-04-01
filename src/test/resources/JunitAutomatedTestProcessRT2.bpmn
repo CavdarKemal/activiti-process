@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="JUnitTestAutomationProcessRT2" name="JUNIT ENE-Teil-Test-Automatisierung2" isExecutable="true">
+    <startEvent id="startEvent" name="Start" activiti:initiator="initiator"></startEvent>
+    <userTask id="UserTaskGeneratePseudoCrefos" name="Pseudo Crefos erzeugen [GeneratePseudoCrefos]">
+      <extensionElements>
+        <activiti:formProperty id="REPEAT_SUBPROCESS" name="REPEAT_SUBPROCESS" type="string" variable="REPEAT_SUBPROCESS" required="true"></activiti:formProperty>
+        <activiti:formProperty id="TIME_BEFORE_NEXT_TASTK" name="TIME_BEFORE_NEXT_TASTK" type="string" variable="TIME_BEFORE_NEXT_TASTK" required="true"></activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <callActivity id="ENECallActivityRTSubProcess1" name="JUNIT ENE-Test-Automatisierung-SUB" calledElement="JUnitCallActivityRTSubProcess">
+      <extensionElements>
+        <activiti:in source="REPEAT_SUBPROCESS" target="REPEAT_SUBPROCESS"></activiti:in>
+        <activiti:in source="TIME_BEFORE_NEXT_TASTK" target="TIME_BEFORE_NEXT_TASTK"></activiti:in>
+        <activiti:in source="MEIN_KEY" target="MEIN_KEY"></activiti:in>
+      </extensionElements>
+    </callActivity>
+    <sequenceFlow id="flow8" sourceRef="ENECallActivityRTSubProcess1" targetRef="UserTaskModifyPseudoCrefos"></sequenceFlow>
+    <userTask id="UserTaskCheckCollects" name="Exporte überprüfen [CheckCollects]"></userTask>
+    <userTask id="UserTaskStartRestore" name="Restore starten [StartRestore]"></userTask>
+    <userTask id="UserTaskStartCheck" name="Check starten [StartCheck]"></userTask>
+    <sequenceFlow id="flow9" sourceRef="UserTaskCheckCollects" targetRef="UserTaskStartRestore"></sequenceFlow>
+    <sequenceFlow id="flow10" sourceRef="UserTaskStartRestore" targetRef="UserTaskStartCheck"></sequenceFlow>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow11" sourceRef="UserTaskStartCheck" targetRef="endevent1"></sequenceFlow>
+    <userTask id="UserTaskModifyPseudoCrefos" name="Pseodos modifizieren [ModifyPseodos]"></userTask>
+    <sequenceFlow id="flow13" sourceRef="UserTaskGeneratePseudoCrefos" targetRef="ENECallActivityRTSubProcess1"></sequenceFlow>
+    <sequenceFlow id="flow14" sourceRef="startEvent" targetRef="UserTaskGeneratePseudoCrefos"></sequenceFlow>
+    <sequenceFlow id="flow16" sourceRef="UserTaskModifyPseudoCrefos" targetRef="ENECallActivityRTSubProcess2"></sequenceFlow>
+    <callActivity id="ENECallActivityRTSubProcess2" name="JUNIT ENE-Test-Automatisierung-SUB" calledElement="JUnitCallActivityRTSubProcess">
+      <extensionElements>
+        <activiti:in source="REPEAT_SUBPROCESS" target="REPEAT_SUBPROCESS"></activiti:in>
+        <activiti:in source="TIME_BEFORE_NEXT_TASTK" target="TIME_BEFORE_NEXT_TASTK"></activiti:in>
+        <activiti:in source="MEIN_KEY" target="MEIN_KEY"></activiti:in>
+      </extensionElements>
+    </callActivity>
+    <sequenceFlow id="flow17" sourceRef="ENECallActivityRTSubProcess2" targetRef="UserTaskCheckCollects"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_JUnitTestAutomationProcessRT2">
+    <bpmndi:BPMNPlane bpmnElement="JUnitTestAutomationProcessRT2" id="BPMNPlane_JUnitTestAutomationProcessRT2">
+      <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="22.0" y="41.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskGeneratePseudoCrefos" id="BPMNShape_UserTaskGeneratePseudoCrefos">
+        <omgdc:Bounds height="70.0" width="140.0" x="92.0" y="24.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ENECallActivityRTSubProcess1" id="BPMNShape_ENECallActivityRTSubProcess1">
+        <omgdc:Bounds height="78.0" width="241.0" x="300.0" y="20.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskCheckCollects" id="BPMNShape_UserTaskCheckCollects">
+        <omgdc:Bounds height="71.0" width="161.0" x="702.0" y="23.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartRestore" id="BPMNShape_UserTaskStartRestore">
+        <omgdc:Bounds height="71.0" width="139.0" x="713.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartCheck" id="BPMNShape_UserTaskStartCheck">
+        <omgdc:Bounds height="71.0" width="108.0" x="729.0" y="248.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="765.0" y="358.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskModifyPseudoCrefos" id="BPMNShape_UserTaskModifyPseudoCrefos">
+        <omgdc:Bounds height="71.0" width="181.0" x="330.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ENECallActivityRTSubProcess2" id="BPMNShape_ENECallActivityRTSubProcess2">
+        <omgdc:Bounds height="75.0" width="241.0" x="300.0" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="420.0" y="98.0"></omgdi:waypoint>
+        <omgdi:waypoint x="420.0" y="150.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="782.0" y="94.0"></omgdi:waypoint>
+        <omgdi:waypoint x="782.0" y="138.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="782.0" y="209.0"></omgdi:waypoint>
+        <omgdi:waypoint x="783.0" y="248.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="783.0" y="319.0"></omgdi:waypoint>
+        <omgdi:waypoint x="782.0" y="358.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="232.0" y="59.0"></omgdi:waypoint>
+        <omgdi:waypoint x="300.0" y="59.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="57.0" y="58.0"></omgdi:waypoint>
+        <omgdi:waypoint x="92.0" y="59.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="420.0" y="221.0"></omgdi:waypoint>
+        <omgdi:waypoint x="420.0" y="270.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="541.0" y="307.0"></omgdi:waypoint>
+        <omgdi:waypoint x="597.0" y="306.0"></omgdi:waypoint>
+        <omgdi:waypoint x="597.0" y="58.0"></omgdi:waypoint>
+        <omgdi:waypoint x="702.0" y="58.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

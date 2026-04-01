@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <message id="startingExportsErrorMessage" name="startingExportsErrorMessage"></message>
+  <message id="preparingExportsErrorMessage" name="preparingExportsErrorMessage"></message>
+  <message id="checkingExportsErrorMessage" name="checkingExportsErrorMessage"></message>
+  <process id="Experiments" name="Experiments" isExecutable="true">
+    <startEvent id="startEvent" name="Start" activiti:initiator="initiator"></startEvent>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <userTask id="UserTaskCreateNewSOLL" name="Neues SOLL erstellen" activiti:candidateGroups="cte-tester"></userTask>
+    <userTask id="UserTaskAskToCreateNewSOLL" name="Neue SOLL erwünscht?" activiti:candidateGroups="cte-tester">
+      <extensionElements>
+        <activiti:formProperty id="createNewSOLL" name="Sollen neue SOLL-Dateien erstellet werden?" type="boolean" variable="createNewSOLL" default="true" required="true"></activiti:formProperty>
+        <activiti:formProperty id="timeForImportCycle" name="timeForImportCycle" type="string" variable="timeForImportCycle" default="PT10S" required="true"></activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow91" sourceRef="exclusivegateway1" targetRef="UserTaskCreateNewSOLL">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${createNewSOLL == true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow92" sourceRef="UserTaskCreateNewSOLL" targetRef="mailtask1"></sequenceFlow>
+    <sequenceFlow id="flow93" sourceRef="exclusivegateway1" targetRef="timerintermediatecatchevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${createNewSOLL == false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow95" sourceRef="UserTaskAskToCreateNewSOLL" targetRef="exclusivegateway1"></sequenceFlow>
+    <sequenceFlow id="flow102" sourceRef="startEvent" targetRef="UserTaskAskToCreateNewSOLL"></sequenceFlow>
+    <intermediateCatchEvent id="timerintermediatecatchevent1" name="TimerCatchEvent">
+      <timerEventDefinition>
+        <timeDuration>${timeForImportCycle}</timeDuration>
+      </timerEventDefinition>
+    </intermediateCatchEvent>
+    <sequenceFlow id="flow103" sourceRef="timerintermediatecatchevent1" targetRef="usertask1"></sequenceFlow>
+    <userTask id="usertask1" name="Gewartet" activiti:candidateGroups="cte-tester"></userTask>
+    <sequenceFlow id="flow104" sourceRef="usertask1" targetRef="mailtask1"></sequenceFlow>
+    <serviceTask id="mailtask1" name="Mail Task" activiti:type="mail">
+      <extensionElements>
+        <activiti:field name="to">
+          <activiti:string><![CDATA[k.cavdar@verband.creditrefrom.de]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="from">
+          <activiti:string><![CDATA[activiti@ene.creditreform.de]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="charset">
+          <activiti:string><![CDATA[UTF-8]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="text">
+          <activiti:expression><![CDATA[Experiment-Flow OK
+TimeOut: ${timeForImportCycle}
+Weuer SOLL erwünscht : ${createNewSOLL}
+]]></activiti:expression>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow105" sourceRef="mailtask1" targetRef="endevent1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Experiments">
+    <bpmndi:BPMNPlane bpmnElement="Experiments" id="BPMNPlane_Experiments">
+      <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="15.0" y="76.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="680.0" y="76.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskCreateNewSOLL" id="BPMNShape_UserTaskCreateNewSOLL">
+        <omgdc:Bounds height="67.0" width="113.0" x="184.0" y="170.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskAskToCreateNewSOLL" id="BPMNShape_UserTaskAskToCreateNewSOLL">
+        <omgdc:Bounds height="67.0" width="113.0" x="80.0" y="60.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="220.0" y="73.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="timerintermediatecatchevent1" id="BPMNShape_timerintermediatecatchevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="296.0" y="76.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
+        <omgdc:Bounds height="67.0" width="113.0" x="360.0" y="60.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mailtask1" id="BPMNShape_mailtask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="530.0" y="66.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow91" id="BPMNEdge_flow91">
+        <omgdi:waypoint x="240.0" y="113.0"></omgdi:waypoint>
+        <omgdi:waypoint x="240.0" y="170.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow92" id="BPMNEdge_flow92">
+        <omgdi:waypoint x="297.0" y="203.0"></omgdi:waypoint>
+        <omgdi:waypoint x="582.0" y="203.0"></omgdi:waypoint>
+        <omgdi:waypoint x="582.0" y="121.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow93" id="BPMNEdge_flow93">
+        <omgdi:waypoint x="260.0" y="93.0"></omgdi:waypoint>
+        <omgdi:waypoint x="296.0" y="93.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow95" id="BPMNEdge_flow95">
+        <omgdi:waypoint x="193.0" y="93.0"></omgdi:waypoint>
+        <omgdi:waypoint x="220.0" y="93.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow102" id="BPMNEdge_flow102">
+        <omgdi:waypoint x="50.0" y="93.0"></omgdi:waypoint>
+        <omgdi:waypoint x="80.0" y="93.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow103" id="BPMNEdge_flow103">
+        <omgdi:waypoint x="331.0" y="93.0"></omgdi:waypoint>
+        <omgdi:waypoint x="360.0" y="93.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow104" id="BPMNEdge_flow104">
+        <omgdi:waypoint x="473.0" y="93.0"></omgdi:waypoint>
+        <omgdi:waypoint x="530.0" y="93.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow105" id="BPMNEdge_flow105">
+        <omgdi:waypoint x="635.0" y="93.0"></omgdi:waypoint>
+        <omgdi:waypoint x="680.0" y="93.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

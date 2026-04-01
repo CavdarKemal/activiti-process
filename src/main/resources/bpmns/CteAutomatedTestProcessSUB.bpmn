@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="%ENV%TestAutomationProcessRT2SUB" name="CTE %ENV%-Teil-Test-Automatisierung2Sub" isExecutable="true">
+    <startEvent id="startEvent" name="Start" activiti:initiator="initiator"></startEvent>
+    <endEvent id="endEvent" name="End"></endEvent>
+    <userTask id="UserTaskStartBeteiligtenImport" name="Beteiligten-Import starten [StartBeteiligtenImport]"></userTask>
+    <userTask id="UserTaskWaitForBeteiligtenImport" name="Beteiligten-Import abwarten [WaitForBeteiligtenImport]"></userTask>
+    <userTask id="UserTaskStartExports" name="Exports starten&amp;abwarten [StartExports]"></userTask>
+    <userTask id="UserTaskStartUploads" name="Upload starten [StartUploads]"></userTask>
+    <userTask id="UserTaskStartCtImport" name="CT-Import starten [StartCtImport]"></userTask>
+    <userTask id="UserTaskWaitForCtImport" name="CT-Import abwarten [WaitForCtImport]"></userTask>
+    <userTask id="UserTaskStartEntgBerechnung" name="ENTG-Berechnung starten [StartEntgBerechnung]"></userTask>
+    <userTask id="UserTaskWaitForEntgBerechnung" name="ENTG-Ber. abwarten [WaitForEntgBerechnung]"></userTask>
+    <userTask id="UserTaskStartBtlgAktualisierung" name="BtlgAkt starten [StartBtlgAktualisierung]"></userTask>
+    <userTask id="UserTaskWaitForBtlgAktualisierung" name="BtlgAkt abwarten [WaitForBtlgAktualisierung]"></userTask>
+    <sequenceFlow id="flowToUserTaskWaitForBeteiligtenImport" sourceRef="UserTaskStartBeteiligtenImport" targetRef="UserTaskWaitForBeteiligtenImport"></sequenceFlow>
+    <sequenceFlow id="flowToUserTaskWaitForCtImport" sourceRef="UserTaskStartCtImport" targetRef="UserTaskWaitForCtImport"></sequenceFlow>
+    <sequenceFlow id="flowToUserTaskStartEntgBerechnung" sourceRef="UserTaskWaitForBeteiligtenImport" targetRef="UserTaskStartEntgBerechnung"></sequenceFlow>
+    <sequenceFlow id="flowToUserTaskWaitForEntgBerechnung" sourceRef="UserTaskStartEntgBerechnung" targetRef="UserTaskWaitForEntgBerechnung"></sequenceFlow>
+    <sequenceFlow id="flow7" sourceRef="startEvent" targetRef="UserTaskStartUploads"></sequenceFlow>
+    <sequenceFlow id="flowToUserTaskStartBtlgAktualisierung" sourceRef="UserTaskWaitForEntgBerechnung" targetRef="UserTaskStartBtlgAktualisierung"></sequenceFlow>
+    <sequenceFlow id="flowToUserTaskWaitForBtlgAktualisierung" sourceRef="UserTaskStartBtlgAktualisierung" targetRef="UserTaskWaitForBtlgAktualisierung"></sequenceFlow>
+    <userTask id="UserTaskStartCollect" name="Exporte sammeln [StartCollect]"></userTask>
+    <userTask id="UserTaskCheckCollects" name="Exporte prüfen [CheckCollects]"></userTask>
+    <sequenceFlow id="flow9" sourceRef="UserTaskStartCollect" targetRef="UserTaskCheckCollects"></sequenceFlow>
+    <sequenceFlow id="flow10" sourceRef="UserTaskCheckCollects" targetRef="UserTaskStartRestore"></sequenceFlow>
+    <userTask id="UserTaskStartRestore" name="Restore starten [StartRestore]"></userTask>
+    <userTask id="UserTaskCheckRefExports" name="REF-Exports prüfen [CheckRefExports]"></userTask>
+    <sequenceFlow id="flow11" sourceRef="UserTaskStartRestore" targetRef="UserTaskCheckRefExports"></sequenceFlow>
+    <userTask id="UserTaskStartSftpUploads" name="SFTP-Uploads starten [StartSftpUploads]"></userTask>
+    <userTask id="UserTaskCheckExportProtokoll" name="Exportprotokoll prüfen [CheckExportProtokoll]"></userTask>
+    <sequenceFlow id="flow12" sourceRef="UserTaskCheckRefExports" targetRef="UserTaskCheckExportProtokoll"></sequenceFlow>
+    <sequenceFlow id="flow13" sourceRef="UserTaskCheckExportProtokoll" targetRef="UserTaskStartSftpUploads"></sequenceFlow>
+    <sequenceFlow id="flow14" sourceRef="UserTaskStartSftpUploads" targetRef="UserTaskCheckSftpUploads"></sequenceFlow>
+    <userTask id="UserTaskCheckSftpUploads" name="SFTP-Uploads checken [CheckSftpUploads]"></userTask>
+    <userTask id="UserTaskWaitBeforBeteiligtenImport" name="Vor BtlgImport Warten [WaittUploads]"></userTask>
+    <sequenceFlow id="flow16" sourceRef="UserTaskStartUploads" targetRef="UserTaskWaitBeforBeteiligtenImport"></sequenceFlow>
+    <sequenceFlow id="flow17" sourceRef="UserTaskWaitBeforBeteiligtenImport" targetRef="UserTaskStartBeteiligtenImport"></sequenceFlow>
+    <userTask id="UserTaskWaitBeforeCtImport" name="Vor Ct-Import Warten [WaittCtImport]"></userTask>
+    <sequenceFlow id="flow18" sourceRef="UserTaskWaitForBtlgAktualisierung" targetRef="UserTaskWaitBeforeCtImport"></sequenceFlow>
+    <sequenceFlow id="flow19" sourceRef="UserTaskWaitBeforeCtImport" targetRef="UserTaskStartCtImport"></sequenceFlow>
+    <sequenceFlow id="flow21" sourceRef="UserTaskStartExports" targetRef="UserTaskStartCollect"></sequenceFlow>
+    <userTask id="UserTaskWaitBeforeExport" name="Vor Exports warten [TaskWaitBeforeExport]"></userTask>
+    <sequenceFlow id="flow22" sourceRef="UserTaskWaitForCtImport" targetRef="UserTaskWaitBeforeExport"></sequenceFlow>
+    <sequenceFlow id="flow23" sourceRef="UserTaskWaitBeforeExport" targetRef="UserTaskStartExports"></sequenceFlow>
+    <sequenceFlow id="flow24" sourceRef="UserTaskCheckSftpUploads" targetRef="endEvent"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_%ENV%TestAutomationProcessRT2SUB">
+    <bpmndi:BPMNPlane bpmnElement="%ENV%TestAutomationProcessRT2SUB" id="BPMNPlane_%ENV%TestAutomationProcessRT2SUB">
+      <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="100.0" y="48.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endEvent" id="BPMNShape_endEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="92.0" y="480.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartBeteiligtenImport" id="BPMNShape_UserTaskStartBeteiligtenImport">
+        <omgdc:Bounds height="70.0" width="140.0" x="380.0" y="143.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskWaitForBeteiligtenImport" id="BPMNShape_UserTaskWaitForBeteiligtenImport">
+        <omgdc:Bounds height="70.0" width="140.0" x="380.0" y="30.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartExports" id="BPMNShape_UserTaskStartExports">
+        <omgdc:Bounds height="70.0" width="140.0" x="562.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartUploads" id="BPMNShape_UserTaskStartUploads">
+        <omgdc:Bounds height="70.0" width="140.0" x="200.0" y="30.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartCtImport" id="BPMNShape_UserTaskStartCtImport">
+        <omgdc:Bounds height="70.0" width="140.0" x="920.0" y="144.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskWaitForCtImport" id="BPMNShape_UserTaskWaitForCtImport">
+        <omgdc:Bounds height="70.0" width="140.0" x="920.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartEntgBerechnung" id="BPMNShape_UserTaskStartEntgBerechnung">
+        <omgdc:Bounds height="70.0" width="140.0" x="562.0" y="30.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskWaitForEntgBerechnung" id="BPMNShape_UserTaskWaitForEntgBerechnung">
+        <omgdc:Bounds height="70.0" width="140.0" x="562.0" y="143.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartBtlgAktualisierung" id="BPMNShape_UserTaskStartBtlgAktualisierung">
+        <omgdc:Bounds height="70.0" width="140.0" x="750.0" y="144.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskWaitForBtlgAktualisierung" id="BPMNShape_UserTaskWaitForBtlgAktualisierung">
+        <omgdc:Bounds height="70.0" width="140.0" x="750.0" y="31.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartCollect" id="BPMNShape_UserTaskStartCollect">
+        <omgdc:Bounds height="61.0" width="141.0" x="389.0" y="265.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskCheckCollects" id="BPMNShape_UserTaskCheckCollects">
+        <omgdc:Bounds height="61.0" width="141.0" x="198.0" y="265.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartRestore" id="BPMNShape_UserTaskStartRestore">
+        <omgdc:Bounds height="61.0" width="141.0" x="198.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskCheckRefExports" id="BPMNShape_UserTaskCheckRefExports">
+        <omgdc:Bounds height="61.0" width="141.0" x="389.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskStartSftpUploads" id="BPMNShape_UserTaskStartSftpUploads">
+        <omgdc:Bounds height="61.0" width="141.0" x="749.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskCheckExportProtokoll" id="BPMNShape_UserTaskCheckExportProtokoll">
+        <omgdc:Bounds height="61.0" width="141.0" x="564.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskCheckSftpUploads" id="BPMNShape_UserTaskCheckSftpUploads">
+        <omgdc:Bounds height="61.0" width="140.0" x="921.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskWaitBeforBeteiligtenImport" id="BPMNShape_UserTaskWaitBeforBeteiligtenImport">
+        <omgdc:Bounds height="70.0" width="140.0" x="200.0" y="143.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskWaitBeforeCtImport" id="BPMNShape_UserTaskWaitBeforeCtImport">
+        <omgdc:Bounds height="70.0" width="140.0" x="920.0" y="30.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskWaitBeforeExport" id="BPMNShape_UserTaskWaitBeforeExport">
+        <omgdc:Bounds height="63.0" width="140.0" x="750.0" y="263.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flowToUserTaskWaitForBeteiligtenImport" id="BPMNEdge_flowToUserTaskWaitForBeteiligtenImport">
+        <omgdi:waypoint x="450.0" y="143.0"></omgdi:waypoint>
+        <omgdi:waypoint x="450.0" y="100.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowToUserTaskWaitForCtImport" id="BPMNEdge_flowToUserTaskWaitForCtImport">
+        <omgdi:waypoint x="990.0" y="214.0"></omgdi:waypoint>
+        <omgdi:waypoint x="990.0" y="260.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowToUserTaskStartEntgBerechnung" id="BPMNEdge_flowToUserTaskStartEntgBerechnung">
+        <omgdi:waypoint x="520.0" y="65.0"></omgdi:waypoint>
+        <omgdi:waypoint x="562.0" y="65.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowToUserTaskWaitForEntgBerechnung" id="BPMNEdge_flowToUserTaskWaitForEntgBerechnung">
+        <omgdi:waypoint x="632.0" y="100.0"></omgdi:waypoint>
+        <omgdi:waypoint x="632.0" y="143.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="135.0" y="65.0"></omgdi:waypoint>
+        <omgdi:waypoint x="200.0" y="65.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowToUserTaskStartBtlgAktualisierung" id="BPMNEdge_flowToUserTaskStartBtlgAktualisierung">
+        <omgdi:waypoint x="702.0" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="750.0" y="179.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowToUserTaskWaitForBtlgAktualisierung" id="BPMNEdge_flowToUserTaskWaitForBtlgAktualisierung">
+        <omgdi:waypoint x="820.0" y="144.0"></omgdi:waypoint>
+        <omgdi:waypoint x="820.0" y="101.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="389.0" y="295.0"></omgdi:waypoint>
+        <omgdi:waypoint x="339.0" y="295.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="268.0" y="326.0"></omgdi:waypoint>
+        <omgdi:waypoint x="268.0" y="380.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="339.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="389.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="530.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="564.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="705.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="749.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="890.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="921.0" y="410.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
+        <omgdi:waypoint x="270.0" y="100.0"></omgdi:waypoint>
+        <omgdi:waypoint x="270.0" y="143.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="340.0" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="380.0" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="890.0" y="66.0"></omgdi:waypoint>
+        <omgdi:waypoint x="920.0" y="65.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="990.0" y="100.0"></omgdi:waypoint>
+        <omgdi:waypoint x="990.0" y="144.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
+        <omgdi:waypoint x="562.0" y="295.0"></omgdi:waypoint>
+        <omgdi:waypoint x="530.0" y="295.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
+        <omgdi:waypoint x="920.0" y="295.0"></omgdi:waypoint>
+        <omgdi:waypoint x="890.0" y="294.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
+        <omgdi:waypoint x="750.0" y="294.0"></omgdi:waypoint>
+        <omgdi:waypoint x="702.0" y="295.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+        <omgdi:waypoint x="991.0" y="441.0"></omgdi:waypoint>
+        <omgdi:waypoint x="990.0" y="497.0"></omgdi:waypoint>
+        <omgdi:waypoint x="127.0" y="497.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

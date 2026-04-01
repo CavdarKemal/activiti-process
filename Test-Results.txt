@@ -1,0 +1,100 @@
+de.creditreform.crefoteam.activiti.CteAutomatedProcessIntegrationTest#testCompleteProcessLoop
+CteAutomatedProcessIntegrationTest#setUp:: Lösche Deployments JUnit*
+CteAutomatedProcessIntegrationTest#setUp:: Lösche Deployments ENE-Junit*
+CteAutomatedProcessIntegrationTest#setUp:: Lösche Deployments AUTOMATED*
+Raeume Deployment 'JUNIT-CteAutomatedTestProcess.bpmn' auf
+Raeume Deployment 'JUNIT-CteAutomatedTestProcessSUB.bpmn' auf
+Prozess gestartet: ID=347176, Key=JUNIT-TestAutomationProcess
+selectTaskForBusinessKey: meinKey=JUNIT-CteAutomated, processInstanceID=347176
+selectTaskForBusinessKey: Task gefunden: ID=347192, ProcessInstanceId=347176, TaskDefinitionKey=UserTaskPrepareTestSystem, Variablen={TEST_TYPE=PHASE1_AND_PHASE2, TIME_BEFORE_CT_IMPORT=0, TIME_BEFORE_EXPORT=0, initiator=kermit, TIME_BEFORE_BTLG_IMPORT=0, MEIN_KEY=JUNIT-CteAutomated}
+Task 1: UserTaskPrepareTestSystem (Setzt die Systemeinstellungen für den Test)
+selectTaskForBusinessKey: meinKey=JUNIT-CteAutomated, processInstanceID=347176
+selectTaskForBusinessKey: Task gefunden: ID=347200, ProcessInstanceId=347176, TaskDefinitionKey=UserTaskGeneratePseudoCrefos, Variablen={TEST_TYPE=PHASE1_AND_PHASE2, TIME_BEFORE_CT_IMPORT=0, TIME_BEFORE_EXPORT=0, initiator=kermit, TIME_BEFORE_BTLG_IMPORT=0, MEIN_KEY=JUNIT-CteAutomated}
+Task 2: UserTaskGeneratePseudoCrefos (Pseudo Crefos erzeugen [GeneratePseudoCrefos])
+  Handler-Klasse: GeneratePseudoCrefos
+selectTaskForBusinessKey: meinKey=JUNIT-CteAutomated, processInstanceID=347176
+.
+.
+.
+.
+CteAutomatedProcessIntegrationTest#tearDown:: Lösche Deployments Junit*
+CteAutomatedProcessIntegrationTest#tearDown:: Lösche Deployments ENE-Junit*
+CteAutomatedProcessIntegrationTest#tearDown:: Lösche Deployments AUTOMATED*
+SMTP server *:3025 stopping
+SMTP server *:3025 stopped
+
+java.util.concurrent.TimeoutException: 
+	queryNextTaskForTaskVariables() liefert keine Nachfolge-Task innerhalb von 60000 Sekunden!
+
+	at de.creditreform.crefoteam.activiti.CteActivitiServiceRestImpl.selectTaskForBusinessKey(CteActivitiServiceRestImpl.java:405)
+	at de.creditreform.crefoteam.activiti.CteAutomatedProcessIntegrationTest.selectNextTask(CteAutomatedProcessIntegrationTest.java:167)
+	at de.creditreform.crefoteam.activiti.CteAutomatedProcessIntegrationTest.testCompleteProcessLoop(CteAutomatedProcessIntegrationTest.java:103)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:47)
+
+de.creditreform.crefoteam.activiti.CteActivitiRestServiceIntegration2Test#testQueryTasksForTaskVariables
+CteActivitiRestServiceIntegration2Test#setUp:: Lösche Deployments JUnit*
+SMTP server *:3025 started
+CteActivitiRestServiceIntegration2Test#setUp:: Lösche Deployments ENE-Junit*
+CteActivitiRestServiceIntegration2Test#setUp:: Lösche Deployments AUTOMATED*
+CteActivitiRestServiceIntegration2Test#tearDown:: Lösche Deployments Junit*
+Lösche Deployment 'JunitTestProcess.bpmn' mit der ID 347423
+CteActivitiRestServiceIntegration2Test#tearDown:: Lösche Deployments ENE-Junit*
+CteActivitiRestServiceIntegration2Test#tearDown:: Lösche Deployments AUTOMATED*
+SMTP server *:3025 stopping
+SMTP server *:3025 stopped
+
+java.lang.AssertionError: MEIN_KEY fehlt in den Task-Variablen für Task 347109
+
+	at org.junit.Assert.fail(Assert.java:88)
+	at org.junit.Assert.assertTrue(Assert.java:41)
+	at org.junit.Assert.assertNotNull(Assert.java:621)
+	at de.creditreform.crefoteam.activiti.CteActivitiRestServiceIntegration2Test.testQueryTasksForTaskVariables(CteActivitiRestServiceIntegration2Test.java:121)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+
+
+de.creditreform.crefoteam.activiti.CteActivitiRestServiceIntegrationTest#testProcessTwoExecutionParallelDifferentSignal
+RestIntegrationTestBase::claimAndCompleteUserTask(JUNIT-KEY-3, UserTask2.0, [signalType=signalType2])::
+selectTaskForBusinessKey: meinKey=JUNIT-KEY-3, processInstanceID=347285
+selectTaskForBusinessKey: Task gefunden: ID=347311, ProcessInstanceId=347285, TaskDefinitionKey=UserTask2.0, Variablen={initiator=kermit, signalType=signalType2, MEIN_KEY=JUNIT-KEY-3}
+CteActivitiRestServiceIntegrationTest#tearDown:: Lösche Deployments Junit*
+Lösche Deployment 'JunitTestProcess.bpmn' mit der ID 347263
+CteActivitiRestServiceIntegrationTest#tearDown:: Lösche Deployments ENE-Junit*
+CteActivitiRestServiceIntegrationTest#tearDown:: Lösche Deployments AUTOMATED*
+SMTP server *:3025 stopping
+SMTP server *:3025 stopped
+
+de.creditreform.crefoteam.cte.rest.exceptions.RestInvokerExceptionInvalidResponse: Statuscode entspricht nicht dem erwarteten '200' (OK), sondern lautet: 500 (Internal Server Error)
+Request-URI:http://nb10007268:9999/activiti-rest/service/runtime/tasks/347311
+Response-Body:{"message":"Internal server error","exception":"Could not send e-mail in execution 347285"}
+
+	at de.creditreform.crefoteam.cte.rest.RestInvokerResponse.expectStatus(RestInvokerResponse.java:116)
+	at de.creditreform.crefoteam.cte.rest.RestInvokerResponse.expectStatusOK(RestInvokerResponse.java:77)
+	at de.creditreform.crefoteam.activiti.CteActivitiServiceRestImpl.completeTask(CteActivitiServiceRestImpl.java:459)
+	at de.creditreform.crefoteam.activiti.RestIntegrationTestBase.claimAndCompleteUserTask(RestIntegrationTestBase.java:81)
+
+
+de.creditreform.crefoteam.activiti.CteActivitiRestServiceIntegrationTest#testProcessTwoExecutionParallelDifferentSignal
+RestIntegrationTestBase::claimAndCompleteUserTask(JUNIT-KEY-1, UserTask0.2, [signalType=signalType0])::
+selectTaskForBusinessKey: meinKey=JUNIT-KEY-1, processInstanceID=347222
+selectTaskForBusinessKey: Task gefunden: ID=347257, ProcessInstanceId=347222, TaskDefinitionKey=UserTask0.2, Variablen={initiator=kermit, signalType=signalType0, MEIN_KEY=JUNIT-KEY-1}
+CteActivitiRestServiceIntegrationTest#tearDown:: Lösche Deployments Junit*
+Lösche Deployment 'JunitTestProcess.bpmn' mit der ID 347218
+CteActivitiRestServiceIntegrationTest#tearDown:: Lösche Deployments ENE-Junit*
+CteActivitiRestServiceIntegrationTest#tearDown:: Lösche Deployments AUTOMATED*
+SMTP server *:3025 stopping
+SMTP server *:3025 stopped
+
+de.creditreform.crefoteam.cte.rest.exceptions.RestInvokerExceptionInvalidResponse: Statuscode entspricht nicht dem erwarteten '200' (OK), sondern lautet: 500 (Internal Server Error)
+Request-URI:http://nb10007268:9999/activiti-rest/service/runtime/tasks/347257
+Response-Body:{"message":"Internal server error","exception":"Could not send e-mail in execution 347222"}
+
+	at de.creditreform.crefoteam.cte.rest.RestInvokerResponse.expectStatus(RestInvokerResponse.java:116)
+	at de.creditreform.crefoteam.cte.rest.RestInvokerResponse.expectStatusOK(RestInvokerResponse.java:77)
+	at de.creditreform.crefoteam.activiti.CteActivitiServiceRestImpl.completeTask(CteActivitiServiceRestImpl.java:459)
+	at de.creditreform.crefoteam.activiti.RestIntegrationTestBase.claimAndCompleteUserTask(RestIntegrationTestBase.java:81)
+

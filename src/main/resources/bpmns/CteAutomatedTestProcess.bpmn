@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <signal id="%ENV%cancelProcessSignal" name="%ENV%cancelProcessSignal" activiti:scope="global"></signal>
+  <message id="startingExportsErrorMessage" name="startingExportsErrorMessage"></message>
+  <message id="preparingExportsErrorMessage" name="preparingExportsErrorMessage"></message>
+  <message id="checkingExportsErrorMessage" name="checkingExportsErrorMessage"></message>
+  <process id="%ENV%-TestAutomationProcess" name="CTE %ENV%-Test-Automatisierung" isExecutable="true">
+    <extensionElements>
+      <activiti:in xmlns:activiti="http://activiti.org/bpmn" source="TEST_TYPE" target="TEST_TYPE"></activiti:in>
+      <activiti:in xmlns:activiti="http://activiti.org/bpmn" source="MEIN_KEY" target="MEIN_KEY"></activiti:in>
+      <activiti:in xmlns:activiti="http://activiti.org/bpmn" source="TIME_BEFORE_BTLG_IMPORT" target="TIME_BEFORE_BTLG_IMPORT"></activiti:in>
+      <activiti:in xmlns:activiti="http://activiti.org/bpmn" source="TIME_BEFORE_CT_IMPORT" target="TIME_BEFORE_CT_IMPORT"></activiti:in>
+      <activiti:in xmlns:activiti="http://activiti.org/bpmn" source="TIME_BEFORE_EXPORT" target="TIME_BEFORE_EXPORT"></activiti:in>
+      <activiti:in xmlns:activiti="http://activiti.org/bpmn" source="UPLOAD_DIR" target="UPLOAD_DIR"></activiti:in>
+      <activiti:in xmlns:activiti="http://activiti.org/bpmn" source="COLLECTED_DIR" target="COLLECTED_DIR"></activiti:in>
+    </extensionElements>
+    <startEvent id="startEvent" name="Start" activiti:initiator="initiator"></startEvent>
+    <exclusiveGateway id="exclusiveGatewayTestType" name="Exclusive Gateway"></exclusiveGateway>
+    <callActivity id="CallActivityRepeatableTestAutomationProcess2SUB1" name="Sub-Prozess Phase-1" calledElement="%ENV%TestAutomationProcessRT2SUB" activiti:inheritVariables="true">
+      <extensionElements>
+        <activiti:in sourceExpression="${'PHASE_1'}" target="TEST_PHASE"></activiti:in>
+        <activiti:in source="MEIN_KEY" target="MEIN_KEY"></activiti:in>
+      </extensionElements>
+    </callActivity>
+    <callActivity id="CallActivityRepeatableTestAutomationProcess2SUB2" name="Sub-Prozess Phase-2" calledElement="%ENV%TestAutomationProcessRT2SUB" activiti:inheritVariables="true">
+      <extensionElements>
+        <activiti:in sourceExpression="${'PHASE_2'}" target="TEST_PHASE"></activiti:in>
+        <activiti:in source="MEIN_KEY" target="MEIN_KEY"></activiti:in>
+      </extensionElements>
+    </callActivity>
+    <endEvent id="endevent2" name="End"></endEvent>
+    <sequenceFlow id="flow21" sourceRef="UserTaskFailureMail" targetRef="UserTaskRestoreTestSystem"></sequenceFlow>
+    <userTask id="UserTaskPrepareTestSystem" name="Setzt die Systemeinstellungen für den Test"></userTask>
+    <userTask id="UserTaskRestoreTestSystem" name="Restauriert System-Einstellungen"></userTask>
+    <sequenceFlow id="flow31" sourceRef="UserTaskPrepareTestSystem" targetRef="exclusiveGatewayTestType"></sequenceFlow>
+    <sequenceFlow id="flow32" sourceRef="UserTaskRestoreTestSystem" targetRef="endevent2"></sequenceFlow>
+    <sequenceFlow id="flow35" sourceRef="exclusiveGatewayTestType" targetRef="UserTaskGeneratePseudoCrefos">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${TEST_TYPE == "PHASE1_AND_PHASE2"}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="UserTaskFailureMail" name="Fehler-Mail"></userTask>
+    <sequenceFlow id="flow44" sourceRef="startEvent" targetRef="UserTaskPrepareTestSystem"></sequenceFlow>
+    <userTask id="UserTaskGeneratePseudoCrefos" name="Pseudo Crefos erzeugen [GeneratePseudoCrefos]"></userTask>
+    <sequenceFlow id="flow45" sourceRef="UserTaskGeneratePseudoCrefos" targetRef="CallActivityRepeatableTestAutomationProcess2SUB1"></sequenceFlow>
+    <sequenceFlow id="flow47" sourceRef="exclusiveGatewayTestType" targetRef="UserTaskFailureMail">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${TEST_TYPE != "PHASE1_AND_PHASE2"}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow48" sourceRef="CallActivityRepeatableTestAutomationProcess2SUB1" targetRef="CallActivityRepeatableTestAutomationProcess2SUB2"></sequenceFlow>
+    <sequenceFlow id="flow49" sourceRef="CallActivityRepeatableTestAutomationProcess2SUB2" targetRef="UserTaskSuccessMail"></sequenceFlow>
+    <userTask id="UserTaskSuccessMail" name="Erfolgs-Mail"></userTask>
+    <sequenceFlow id="flow50" sourceRef="UserTaskSuccessMail" targetRef="UserTaskRestoreTestSystem"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_%ENV%-TestAutomationProcess">
+    <bpmndi:BPMNPlane bpmnElement="%ENV%-TestAutomationProcess" id="BPMNPlane_%ENV%-TestAutomationProcess">
+      <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="10.0" y="293.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusiveGatewayTestType" id="BPMNShape_exclusiveGatewayTestType">
+        <omgdc:Bounds height="40.0" width="40.0" x="239.0" y="290.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CallActivityRepeatableTestAutomationProcess2SUB1" id="BPMNShape_CallActivityRepeatableTestAutomationProcess2SUB1">
+        <omgdc:Bounds height="82.0" width="260.0" x="399.0" y="113.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CallActivityRepeatableTestAutomationProcess2SUB2" id="BPMNShape_CallActivityRepeatableTestAutomationProcess2SUB2">
+        <omgdc:Bounds height="82.0" width="258.0" x="400.0" y="276.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent2" id="BPMNShape_endevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="1060.0" y="299.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskPrepareTestSystem" id="BPMNShape_UserTaskPrepareTestSystem">
+        <omgdc:Bounds height="80.0" width="110.0" x="88.0" y="271.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskRestoreTestSystem" id="BPMNShape_UserTaskRestoreTestSystem">
+        <omgdc:Bounds height="80.0" width="123.0" x="889.0" y="277.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskFailureMail" id="BPMNShape_UserTaskFailureMail">
+        <omgdc:Bounds height="55.0" width="105.0" x="720.0" y="400.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskGeneratePseudoCrefos" id="BPMNShape_UserTaskGeneratePseudoCrefos">
+        <omgdc:Bounds height="68.0" width="191.0" x="164.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskSuccessMail" id="BPMNShape_UserTaskSuccessMail">
+        <omgdc:Bounds height="55.0" width="105.0" x="720.0" y="289.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
+        <omgdi:waypoint x="825.0" y="427.0"></omgdi:waypoint>
+        <omgdi:waypoint x="950.0" y="427.0"></omgdi:waypoint>
+        <omgdi:waypoint x="950.0" y="357.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow31" id="BPMNEdge_flow31">
+        <omgdi:waypoint x="198.0" y="311.0"></omgdi:waypoint>
+        <omgdi:waypoint x="239.0" y="310.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow32" id="BPMNEdge_flow32">
+        <omgdi:waypoint x="1012.0" y="317.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1060.0" y="316.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow35" id="BPMNEdge_flow35">
+        <omgdi:waypoint x="259.0" y="290.0"></omgdi:waypoint>
+        <omgdi:waypoint x="259.0" y="188.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow44" id="BPMNEdge_flow44">
+        <omgdi:waypoint x="45.0" y="310.0"></omgdi:waypoint>
+        <omgdi:waypoint x="88.0" y="311.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow45" id="BPMNEdge_flow45">
+        <omgdi:waypoint x="355.0" y="154.0"></omgdi:waypoint>
+        <omgdi:waypoint x="399.0" y="154.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow47" id="BPMNEdge_flow47">
+        <omgdi:waypoint x="259.0" y="330.0"></omgdi:waypoint>
+        <omgdi:waypoint x="259.0" y="427.0"></omgdi:waypoint>
+        <omgdi:waypoint x="720.0" y="427.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow48" id="BPMNEdge_flow48">
+        <omgdi:waypoint x="529.0" y="195.0"></omgdi:waypoint>
+        <omgdi:waypoint x="529.0" y="276.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow49" id="BPMNEdge_flow49">
+        <omgdi:waypoint x="658.0" y="317.0"></omgdi:waypoint>
+        <omgdi:waypoint x="720.0" y="316.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow50" id="BPMNEdge_flow50">
+        <omgdi:waypoint x="825.0" y="316.0"></omgdi:waypoint>
+        <omgdi:waypoint x="889.0" y="317.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

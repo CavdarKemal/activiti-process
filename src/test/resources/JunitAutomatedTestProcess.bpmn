@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test" id="m1500539702039" name="">
+  <signal id="cancelProcessSignal" name="cancelProcessSignal" activiti:scope="global"></signal>
+  <message id="startingExportsErrorMessage" name="startingExportsErrorMessage"></message>
+  <message id="preparingExportsErrorMessage" name="preparingExportsErrorMessage"></message>
+  <message id="checkingExportsErrorMessage" name="checkingExportsErrorMessage"></message>
+  <process id="JunitAutomatedTestProcess" name="JunitAutomatedTestProcess" isExecutable="true" isClosed="false" processType="None">
+    <startEvent id="startEvent" name="Start" activiti:initiator="initiator"></startEvent>
+    <userTask id="UserTaskEnterTestData" name="Test-Art und -Fäle angeben">
+      <extensionElements>
+        <activiti:formProperty id="TEST_TYPE" name="TEST_TYPE" type="enum" variable="TEST_TYPE" default="TEST_TYPE_PHASE2_ONLY" required="true">
+          <activiti:value id="InitialTest" name="Initial Test"></activiti:value>
+          <activiti:value id="CompleteTest" name="Kompletter Test"></activiti:value>
+          <activiti:value id="TEST_TYPE_PHASE2_ONLY" name="Wiederholter Test"></activiti:value>
+          <activiti:value id="ReTestWithLastExports" name="Test mit den letzten Exports"></activiti:value>
+          <activiti:value id="CancelProcess" name="Abbruch"></activiti:value>
+        </activiti:formProperty>
+        <activiti:formProperty id="MEIN_KEY" name="MEIN_KEY" type="string" variable="MEIN_KEY" required="true"></activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="exclusiveGatewayTestType" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flowToUserTaskEnterTestData" sourceRef="startEvent" targetRef="UserTaskPauseAllJobs"></sequenceFlow>
+    <sequenceFlow id="flowFromUserTaskEnterTestData" sourceRef="UserTaskEnterTestData" targetRef="exclusiveGatewayTestType"></sequenceFlow>
+    <sequenceFlow id="flowRepeatableTest" sourceRef="exclusiveGatewayTestType" targetRef="CallActivityRepeatableTestAutomationProcess">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${TEST_TYPE == "TEST_TYPE_PHASE2_ONLY"}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flowFromSubProcessRepeatableTest" sourceRef="CallActivityRepeatableTestAutomationProcess" targetRef="mailTaskSuccess"></sequenceFlow>
+    <sequenceFlow id="flowFromSuccessMail" sourceRef="mailTaskSuccess" targetRef="UserTaskResumeAllJobs"></sequenceFlow>
+    <serviceTask id="mailTaskSuccess" name="Success Mail" activiti:type="mail">
+      <extensionElements>
+        <activiti:field name="to">
+          <activiti:expression><![CDATA[${SUCCESS_MAIL_TO}]]></activiti:expression>
+        </activiti:field>
+        <activiti:field name="from">
+          <activiti:expression><![CDATA[${EMAIL_FROM}]]></activiti:expression>
+        </activiti:field>
+        <activiti:field name="subject">
+          <activiti:string><![CDATA[CTE Test-Automatisierung]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="text">
+          <activiti:expression><![CDATA[${TEST_TYPE} erfolgreich abgeschlossen.]]></activiti:expression>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <callActivity id="CallActivityRepeatableTestAutomationProcess2" name="Repeatable Test Automation Process2" calledElement="JunitAutomatedTestProcessRT2">
+      <extensionElements>
+        <activiti:in source="TEST_TYPE" target="TEST_TYPE"></activiti:in>
+        <activiti:in source="MEIN_KEY" target="MEIN_KEY"></activiti:in>
+        <activiti:out source="MEIN_KEY" target="MEIN_KEY"></activiti:out>
+      </extensionElements>
+    </callActivity>
+    <callActivity id="CallActivityRepeatableTestAutomationProcess" name="Repeatable Test Automation Process" calledElement="JunitAutomatedTestProcessRT">
+      <extensionElements>
+        <activiti:in source="TEST_TYPE" target="TEST_TYPE"></activiti:in>
+        <activiti:in source="MEIN_KEY" target="MEIN_KEY"></activiti:in>
+        <activiti:out source="MEIN_KEY" target="MEIN_KEY"></activiti:out>
+      </extensionElements>
+    </callActivity>
+    <serviceTask id="mailTaskFailure" name="Failure Mail" activiti:type="mail">
+      <extensionElements>
+        <activiti:field name="to">
+          <activiti:expression><![CDATA[${FAILURE_MAIL_TO}]]></activiti:expression>
+        </activiti:field>
+        <activiti:field name="from">
+          <activiti:expression><![CDATA[${EMAIL_FROM}]]></activiti:expression>
+        </activiti:field>
+        <activiti:field name="subject">
+          <activiti:string><![CDATA[CTE Test-Automatisierung]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="text">
+          <activiti:expression><![CDATA[${TEST_TYPE} mit Fehler abgebrochen!]]></activiti:expression>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <endEvent id="endevent2" name="End"></endEvent>
+    <sequenceFlow id="flow19" sourceRef="exclusiveGatewayTestType" targetRef="mailTaskFailure">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${TEST_TYPE == "CancelProcess"}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow21" sourceRef="mailTaskFailure" targetRef="UserTaskResumeAllJobs"></sequenceFlow>
+    <boundaryEvent id="boundarysignal3" name="Signal" attachedToRef="CallActivityRepeatableTestAutomationProcess" cancelActivity="true">
+      <signalEventDefinition signalRef="cancelProcessSignal"></signalEventDefinition>
+    </boundaryEvent>
+    <sequenceFlow id="flowInitialTest" sourceRef="exclusiveGatewayTestType" targetRef="CallActivityRepeatableTestAutomationProcess2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${TEST_TYPE == "PHASE1_AND_PHASE2"}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow24" sourceRef="CallActivityRepeatableTestAutomationProcess2" targetRef="mailTaskSuccess"></sequenceFlow>
+    <boundaryEvent id="boundarysignal4" name="Signal" attachedToRef="CallActivityRepeatableTestAutomationProcess2" cancelActivity="true">
+      <signalEventDefinition signalRef="cancelProcessSignal"></signalEventDefinition>
+    </boundaryEvent>
+    <userTask id="UserTaskPauseAllJobs" name="Pausiert alle JVM-Jobs, die sich in der Engine befinden"></userTask>
+    <sequenceFlow id="flow26" sourceRef="UserTaskPauseAllJobs" targetRef="UserTaskEnterTestData"></sequenceFlow>
+    <userTask id="UserTaskResumeAllJobs" name="Resumes alle JVM-Jobs, die sich in der Engine befinden"></userTask>
+    <sequenceFlow id="flow27" sourceRef="UserTaskResumeAllJobs" targetRef="endevent2"></sequenceFlow>
+    <sequenceFlow id="flow30" sourceRef="boundarysignal4" targetRef="mailTaskFailure"></sequenceFlow>
+    <sequenceFlow id="flow31" sourceRef="boundarysignal3" targetRef="mailTaskFailure"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_JunitAutomatedTestProcess">
+    <bpmndi:BPMNPlane bpmnElement="JunitAutomatedTestProcess" id="BPMNPlane_JunitAutomatedTestProcess">
+      <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="129.0" y="58.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskEnterTestData" id="BPMNShape_UserTaskEnterTestData">
+        <omgdc:Bounds height="80.0" width="110.0" x="91.0" y="270.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusiveGatewayTestType" id="BPMNShape_exclusiveGatewayTestType">
+        <omgdc:Bounds height="40.0" width="40.0" x="239.0" y="290.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mailTaskSuccess" id="BPMNShape_mailTaskSuccess">
+        <omgdc:Bounds height="55.0" width="105.0" x="712.0" y="262.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CallActivityRepeatableTestAutomationProcess2" id="BPMNShape_CallActivityRepeatableTestAutomationProcess2">
+        <omgdc:Bounds height="80.0" width="260.0" x="320.0" y="160.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="boundarysignal4" id="BPMNShape_boundarysignal4">
+        <omgdc:Bounds height="30.0" width="30.0" x="556.0" y="220.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="CallActivityRepeatableTestAutomationProcess" id="BPMNShape_CallActivityRepeatableTestAutomationProcess">
+        <omgdc:Bounds height="80.0" width="260.0" x="320.0" y="56.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="boundarysignal3" id="BPMNShape_boundarysignal3">
+        <omgdc:Bounds height="30.0" width="30.0" x="560.0" y="116.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mailTaskFailure" id="BPMNShape_mailTaskFailure">
+        <omgdc:Bounds height="55.0" width="105.0" x="560.0" y="390.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent2" id="BPMNShape_endevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="880.0" y="400.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskPauseAllJobs" id="BPMNShape_UserTaskPauseAllJobs">
+        <omgdc:Bounds height="80.0" width="110.0" x="91.0" y="146.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTaskResumeAllJobs" id="BPMNShape_UserTaskResumeAllJobs">
+        <omgdc:Bounds height="80.0" width="110.0" x="710.0" y="378.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flowToUserTaskEnterTestData" id="BPMNEdge_flowToUserTaskEnterTestData">
+        <omgdi:waypoint x="146.0" y="93.0"></omgdi:waypoint>
+        <omgdi:waypoint x="146.0" y="146.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowFromUserTaskEnterTestData" id="BPMNEdge_flowFromUserTaskEnterTestData">
+        <omgdi:waypoint x="201.0" y="310.0"></omgdi:waypoint>
+        <omgdi:waypoint x="239.0" y="310.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowRepeatableTest" id="BPMNEdge_flowRepeatableTest">
+        <omgdi:waypoint x="259.0" y="290.0"></omgdi:waypoint>
+        <omgdi:waypoint x="258.0" y="259.0"></omgdi:waypoint>
+        <omgdi:waypoint x="258.0" y="97.0"></omgdi:waypoint>
+        <omgdi:waypoint x="320.0" y="96.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowFromSubProcessRepeatableTest" id="BPMNEdge_flowFromSubProcessRepeatableTest">
+        <omgdi:waypoint x="580.0" y="96.0"></omgdi:waypoint>
+        <omgdi:waypoint x="764.0" y="96.0"></omgdi:waypoint>
+        <omgdi:waypoint x="764.0" y="262.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowFromSuccessMail" id="BPMNEdge_flowFromSuccessMail">
+        <omgdi:waypoint x="764.0" y="317.0"></omgdi:waypoint>
+        <omgdi:waypoint x="765.0" y="378.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="259.0" y="330.0"></omgdi:waypoint>
+        <omgdi:waypoint x="259.0" y="417.0"></omgdi:waypoint>
+        <omgdi:waypoint x="560.0" y="417.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
+        <omgdi:waypoint x="665.0" y="417.0"></omgdi:waypoint>
+        <omgdi:waypoint x="710.0" y="418.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flowInitialTest" id="BPMNEdge_flowInitialTest">
+        <omgdi:waypoint x="259.0" y="290.0"></omgdi:waypoint>
+        <omgdi:waypoint x="258.0" y="240.0"></omgdi:waypoint>
+        <omgdi:waypoint x="258.0" y="200.0"></omgdi:waypoint>
+        <omgdi:waypoint x="320.0" y="200.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+        <omgdi:waypoint x="580.0" y="200.0"></omgdi:waypoint>
+        <omgdi:waypoint x="764.0" y="199.0"></omgdi:waypoint>
+        <omgdi:waypoint x="764.0" y="262.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow26" id="BPMNEdge_flow26">
+        <omgdi:waypoint x="146.0" y="226.0"></omgdi:waypoint>
+        <omgdi:waypoint x="146.0" y="270.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow27" id="BPMNEdge_flow27">
+        <omgdi:waypoint x="820.0" y="418.0"></omgdi:waypoint>
+        <omgdi:waypoint x="880.0" y="417.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow30" id="BPMNEdge_flow30">
+        <omgdi:waypoint x="586.0" y="235.0"></omgdi:waypoint>
+        <omgdi:waypoint x="612.0" y="234.0"></omgdi:waypoint>
+        <omgdi:waypoint x="612.0" y="390.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow31" id="BPMNEdge_flow31">
+        <omgdi:waypoint x="590.0" y="131.0"></omgdi:waypoint>
+        <omgdi:waypoint x="612.0" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="612.0" y="390.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

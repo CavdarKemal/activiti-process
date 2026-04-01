@@ -1,0 +1,27 @@
+services:
+  activiti5-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: activiti
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    # Kein Volume = frische DB bei jedem Start!
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  activiti5:
+    build: ./activiti5
+    image: activiti5:latest
+    ports:
+      - "${ACTIVITI5_PORT:-9091}:8080"
+      - "2526:25"
+    depends_on:
+      activiti5-db:
+        condition: service_healthy
+    environment:
+      JAVA_OPTS: "-Xmx512m"
