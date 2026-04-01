@@ -12,7 +12,7 @@ REST-API-Kapselung fuer Activiti 5.19 und Activiti 6.0 in einem Projekt.
 | SMTP-Sink-Port | 2526 | 2525 |
 | Web-UI | – | activiti-app |
 | Process Explorer | http://localhost:9091/process-explorer | http://localhost:9090/process-explorer |
-| REST API | http://localhost:9091/activiti-rest/service | http://localhost:9090/activiti-rest/service |
+| REST API (Deployments) | http://localhost:9091/activiti-rest/service/repository/deployments | http://localhost:9090/activiti-rest/service/repository/deployments |
 | Login | `kermit` / `kermit` | `kermit` / `kermit` |
 
 ---
@@ -81,8 +81,8 @@ Activiti 5: einfach das Terminal-Fenster schliessen oder `Ctrl+C`.
 |---|---|
 | http://localhost:9090/process-explorer | **Process Explorer Activiti 6** |
 | http://localhost:9091/process-explorer | **Process Explorer Activiti 5** |
-| http://localhost:9090/activiti-rest/service | REST API Activiti 6 |
-| http://localhost:9091/activiti-rest/service | REST API Activiti 5 |
+| http://localhost:9090/activiti-rest/service/repository/deployments | REST API Activiti 6 (Beispiel-Endpoint) |
+| http://localhost:9091/activiti-rest/service/repository/deployments | REST API Activiti 5 (Beispiel-Endpoint) |
 | http://localhost:9090/activiti-app | Web-UI Activiti 6 (Prozess-Designer, Task-Manager) |
 
 ---
