@@ -19,8 +19,11 @@ RUN curl -L -o /usr/local/tomcat/webapps/activiti-rest/WEB-INF/lib/postgresql-42
     https://jdbc.postgresql.org/download/postgresql-42.2.29.jar
 
 # Minimale ROOT-Seite
-RUN echo '<html><body><h2>Activiti 5.19</h2><ul><li><a href="/activiti-rest/service">REST API</a> (kermit/kermit)</li></ul></body></html>' \
+RUN echo '<html><body><h2>Activiti 5.19</h2><ul><li><a href="/activiti-rest/service">REST API</a> (kermit/kermit)</li><li><a href="/process-explorer">Process Explorer</a></li></ul></body></html>' \
     > /usr/local/tomcat/webapps/ROOT/index.html
+
+# Process Explorer
+COPY process-explorer/ /usr/local/tomcat/webapps/process-explorer/
 
 # PostgreSQL Konfiguration kopieren
 COPY db.properties /usr/local/tomcat/webapps/activiti-rest/WEB-INF/classes/db.properties

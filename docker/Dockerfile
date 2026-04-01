@@ -40,8 +40,11 @@ COPY activiti-app.properties /usr/local/tomcat/webapps/activiti-app/WEB-INF/clas
 COPY engine.properties /usr/local/tomcat/webapps/activiti-rest/WEB-INF/classes/engine.properties
 
 # Minimale ROOT-Seite mit Links
-RUN echo '<html><body><h2>Activiti 6.0</h2><ul><li><a href="/activiti-app">Activiti App</a> (kermit/kermit)</li><li><a href="/activiti-rest/service">REST API</a></li></ul></body></html>' \
+RUN echo '<html><body><h2>Activiti 6.0</h2><ul><li><a href="/activiti-app">Activiti App</a> (kermit/kermit)</li><li><a href="/activiti-rest/service">REST API</a></li><li><a href="/process-explorer">Process Explorer</a></li></ul></body></html>' \
     > /usr/local/tomcat/webapps/ROOT/index.html
+
+# Process Explorer
+COPY process-explorer/ /usr/local/tomcat/webapps/process-explorer/
 
 # User-Init Script und SQL
 COPY init-users.sql /usr/local/tomcat/init-users.sql
