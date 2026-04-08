@@ -1,7 +1,7 @@
 package de.creditreform.crefoteam.activiti;
 
 public class ActivitiJunitConstants {
-    public static final String JUNIT_ACTIVITI_URL = "http://localhost:9091";
+    public static final String JUNIT_ACTIVITI_URL = "http://localhost:9090";
     public static final String JUNIT_ACTIVITI_GROUP = "CTE_ENE_TESTER_GROUP";
     public static final String JUNIT_ACTIVITI_USER = "kermit";
     public static final String JUNIT_ACTIVITI_PWD = "kermit";
