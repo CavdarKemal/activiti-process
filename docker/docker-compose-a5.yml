@@ -1,27 +1,71 @@
+# =============================================================================
+# TestSupportClient — Activiti 5 (Docker Compose)
+# =============================================================================
+# Stellt den Activiti-5-BPMN-Workflow-Engine-Container bereit, der von den
+# JUnit-Tests in testsupport_client (TestSupportViewActivitiTest) verwendet wird.
+#
+# Zugehoerige Konfiguration in ENE-config.properties:
+#   ACTIVITI_URLS = ...::http://localhost:9091   (erster Eintrag = configs.get(0))
+#
+# WICHTIG: Dieser Container wird vom Test als ERSTER angesprochen!
+#          Ohne laufenden Activiti-5 schlaegt setUpClass() fehl.
+#
+# Starten:  docker compose -f docker-compose-a5.yml up -d
+# Stoppen:  docker compose -f docker-compose-a5.yml down
+# Logs:     docker compose -f docker-compose-a5.yml logs -f activiti5
+#
+# Siehe auch: docker-compose.yml fuer Activiti 6 (Port 9090)
+# =============================================================================
+
+name: TestSupportClient-A5
+
 services:
+
+  # ---------------------------------------------------------------------------
+  # PostgreSQL-Datenbank fuer Activiti 5
+  # ---------------------------------------------------------------------------
+  # Gleiche Konfiguration wie Activiti-6-DB, aber eigener Container.
+  # tmpfs = frische DB bei jedem Start (kein persistenter Zustand).
+  # ---------------------------------------------------------------------------
   activiti5-db:
     image: postgres:15-alpine
+    container_name: TestSupportClient-activiti5-db
     environment:
-      POSTGRES_DB: activiti
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    # Kein Volume = frische DB bei jedem Start!
+      POSTGRES_DB: activiti        # Datenbankname, den Activiti erwartet
+      POSTGRES_USER: postgres      # Standard-DB-User
+      POSTGRES_PASSWORD: postgres  # Standard-DB-Passwort
     tmpfs:
-      - /var/lib/postgresql/data
+      - /var/lib/postgresql/data   # RAM-Disk: kein persistenter Speicher
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 10
 
+  # ---------------------------------------------------------------------------
+  # Activiti 5.19.0 — BPMN Workflow Engine (Tomcat 9 + JDK 8)
+  # ---------------------------------------------------------------------------
+  # REST-API:         http://localhost:9091/activiti-rest/service/
+  # Process Explorer: http://localhost:9091/process-explorer
+  # SMTP-Sink:        Port 2526 (faengt E-Mails ab, die Activiti-Prozesse senden)
+  #
+  # Port konfigurierbar via Umgebungsvariable ACTIVITI5_PORT (Standard: 9091)
+  #
+  # Unterschiede zu Activiti 6:
+  #   - JDK 8 statt JDK 11
+  #   - Keine activiti-app (nur REST-API)
+  #   - Port 9091 statt 9090
+  #   - SMTP-Sink auf 2526 statt 2525
+  # ---------------------------------------------------------------------------
   activiti5:
     build: ./activiti5
     image: activiti5:latest
+    container_name: TestSupportClient-activiti5
     ports:
-      - "${ACTIVITI5_PORT:-9091}:8080"
-      - "2526:25"
+      - "${ACTIVITI5_PORT:-9091}:8080"  # Activiti REST (Tomcat)
+      - "2526:25"                       # SMTP-Sink fuer Test-E-Mails
     depends_on:
       activiti5-db:
-        condition: service_healthy
+        condition: service_healthy      # Startet erst wenn DB bereit ist
     environment:
-      JAVA_OPTS: "-Xmx512m"
+      JAVA_OPTS: "-Xmx512m"            # Speicherlimit fuer die JVM
