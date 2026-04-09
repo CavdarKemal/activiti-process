@@ -402,7 +402,7 @@ public class CteActivitiServiceRestImpl implements CteActivitiService {
             Thread.sleep(1000);
             LOGGER.info(".");
             if (System.currentTimeMillis() > timeMillis + restTimeoutInMillis) {
-                throw new TimeoutException("\n\tqueryNextTaskForTaskVariables() liefert keine Nachfolge-Task innerhalb von " + restTimeoutInMillis + " Sekunden!");
+                throw new TimeoutException("\n\tqueryNextTaskForTaskVariables() liefert keine Nachfolge-Task innerhalb von " + (restTimeoutInMillis / 1000) + " Sekunden!");
             }
         }
         LOGGER.info("selectTaskForBusinessKey: Task gefunden: ID={}, ProcessInstanceId={}, TaskDefinitionKey={}, Variablen={}",
