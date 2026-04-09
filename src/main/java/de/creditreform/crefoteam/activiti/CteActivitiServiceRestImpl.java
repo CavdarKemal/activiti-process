@@ -10,7 +10,7 @@ import de.creditreform.crefoteam.cte.rest.RestInvokerResponse;
 import org.activiti.rest.service.api.RestUrls;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.junit.Assert;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -193,10 +193,10 @@ public class CteActivitiServiceRestImpl implements CteActivitiService {
     public void deleteProcessInstances(String processDefinitionKey, String meinKey) throws Exception {
         Map<String, Object> paramsMap = new HashMap<>();
         if (processDefinitionKey == null || processDefinitionKey.isEmpty()) {
-            Assert.fail("Parameter <processDefinitionKey> darf nicht leer sein!");
+            throw new IllegalArgumentException("Parameter <processDefinitionKey> darf nicht leer sein!");
         }
         if (meinKey == null || meinKey.isEmpty()) {
-            Assert.fail("Parameter <meinKey> darf nicht leer sein!");
+            throw new IllegalArgumentException("Parameter <meinKey> darf nicht leer sein!");
         }
         paramsMap.put(ActivitProcessConstants.UT_TASK_PARAM_NAME_MEIN_KEY, meinKey);
         List<CteActivitiProcess> processInstancesList = queryProcessInstances(processDefinitionKey, paramsMap);
@@ -249,16 +249,16 @@ public class CteActivitiServiceRestImpl implements CteActivitiService {
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put(ActivitProcessConstants.UT_TASK_PARAM_NAME_MEIN_KEY, meinKey);
         CteActivitiProcess processInstance = startProcess(processDefinitionKey, paramsMap);
-        Assert.assertNotNull(processInstance);
+        Objects.requireNonNull(processInstance, "startProcess() darf nicht null liefern");
         Map<String, String> variables = processInstance.getVariables();
         String meinKeyX = variables.get(ActivitProcessConstants.UT_TASK_PARAM_NAME_MEIN_KEY);
-        Assert.assertEquals(meinKey, meinKeyX);
-        Assert.assertNotNull(variables.get("initiator"));
+        if (!meinKey.equals(meinKeyX)) {
+            throw new IllegalStateException("MEIN_KEY stimmt nicht ueberein: erwartet=" + meinKey + ", erhalten=" + meinKeyX);
+        }
 
         Integer pInstanceID = processInstance.getId();
         CteActivitiProcess cteActivitiProcessInstance2 = getProcessInstanceByID(pInstanceID);
-        Assert.assertNotNull(cteActivitiProcessInstance2);
-        Assert.assertEquals(pInstanceID.intValue(), cteActivitiProcessInstance2.getId().intValue());
+        Objects.requireNonNull(cteActivitiProcessInstance2, "getProcessInstanceByID() darf nicht null liefern fuer ID=" + pInstanceID);
         return pInstanceID;
     }
 
@@ -500,7 +500,9 @@ public class CteActivitiServiceRestImpl implements CteActivitiService {
     protected void checkTaskVariables(CteActivitiTask cteActivitiTask, String meinKey2) {
         Map<String, String> variables = cteActivitiTask.getVariables();
         String meinKeyX = variables.get(ActivitProcessConstants.UT_TASK_PARAM_NAME_MEIN_KEY);
-        Assert.assertEquals(meinKeyX, meinKey2);
+        if (!Objects.equals(meinKeyX, meinKey2)) {
+            throw new IllegalStateException("MEIN_KEY stimmt nicht ueberein: erwartet=" + meinKey2 + ", erhalten=" + meinKeyX);
+        }
         // ????? warum fehlt die denn manchmal??? Assert.assertNotNull(variables.get("initiator"));
         logUserTask(cteActivitiTask);
     }
