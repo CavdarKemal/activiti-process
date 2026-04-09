@@ -607,9 +607,14 @@ public class CteActivitiServiceRestImpl implements CteActivitiService {
         ArrayNode array = objectMapper.createArrayNode();
         if (paramsMap != null) {
             for (Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+                Object value = entry.getValue();
+                if (value == null) {
+                    LOGGER.warn("buildVariablesArray: null-Wert fuer Key '{}' uebersprungen", entry.getKey());
+                    continue;
+                }
                 ObjectNode varNode = objectMapper.createObjectNode();
                 varNode.put("name", entry.getKey());
-                varNode.put("value", entry.getValue().toString());
+                varNode.put("value", value.toString());
                 array.add(varNode);
             }
         }
@@ -620,7 +625,12 @@ public class CteActivitiServiceRestImpl implements CteActivitiService {
         ArrayNode array = objectMapper.createArrayNode();
         if (paramsMap != null) {
             for (Map.Entry<String, Object> entry : paramsMap.entrySet()) {
-                String value = entry.getValue().toString();
+                Object rawValue = entry.getValue();
+                if (rawValue == null) {
+                    LOGGER.warn("buildProcessVariablesArrayWithAutoOperation: null-Wert fuer Key '{}' uebersprungen", entry.getKey());
+                    continue;
+                }
+                String value = rawValue.toString();
                 String operation = value.contains("%") ? "like" : "equals";
                 ObjectNode varNode = objectMapper.createObjectNode();
                 varNode.put("name", entry.getKey());
@@ -647,9 +657,14 @@ public class CteActivitiServiceRestImpl implements CteActivitiService {
         ArrayNode array = objectMapper.createArrayNode();
         if (paramsMap != null) {
             for (Map.Entry<String, Object> entry : paramsMap.entrySet()) {
+                Object value = entry.getValue();
+                if (value == null) {
+                    LOGGER.warn("buildProcessVariablesArrayEquals: null-Wert fuer Key '{}' uebersprungen", entry.getKey());
+                    continue;
+                }
                 ObjectNode varNode = objectMapper.createObjectNode();
                 varNode.put("name", entry.getKey());
-                varNode.put("value", entry.getValue().toString());
+                varNode.put("value", value.toString());
                 varNode.put("operation", "equals");
                 varNode.put("type", "string");
                 array.add(varNode);

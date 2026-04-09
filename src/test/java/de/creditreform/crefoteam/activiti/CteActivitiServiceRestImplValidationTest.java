@@ -56,4 +56,27 @@ public class CteActivitiServiceRestImplValidationTest {
         assertTrue("Default-Timeout muss > 0 Sekunden sein", expectedSeconds > 0);
         assertFalse("Message darf nicht die rohen Millisekunden enthalten", String.valueOf(timeoutMs).equals(String.valueOf(expectedSeconds)));
     }
+
+    // =======================================================================
+    // Fix #3: null-Values in Map duerfen keine NPE verursachen
+    // =======================================================================
+
+    @Test
+    public void testStartProcess_mitNullValueInMap_keineNPE() throws Exception {
+        // startProcess baut intern buildVariablesArray auf — null-Values muessen uebersprungen werden
+        java.util.Map<String, Object> params = new java.util.HashMap<>();
+        params.put("MEIN_KEY", "test");
+        params.put("NULL_VALUE_KEY", null);
+        // startProcess wird scheitern wegen fehlender Activiti-Verbindung,
+        // aber es darf KEINE NullPointerException bei buildVariablesArray sein
+        try {
+            service.startProcess("NonExistentProcess", params);
+            fail("Sollte wegen fehlender Verbindung fehlschlagen");
+        } catch (NullPointerException e) {
+            fail("NPE bei null-Value in Map — buildVariablesArray hat keinen Null-Guard: " + e.getMessage());
+        } catch (Exception e) {
+            // Erwartet: Verbindungsfehler, NICHT NPE
+            assertFalse("Fehler darf keine NPE sein", e instanceof NullPointerException);
+        }
+    }
 }
