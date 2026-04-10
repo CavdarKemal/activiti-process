@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class JsonNodeHelper {
 
-    final JsonNode jsonNodeData;
+    private final JsonNode jsonNodeData;
 
     public JsonNodeHelper(JsonNode jsonNodeData) {
         this.jsonNodeData = jsonNodeData;
@@ -20,5 +20,9 @@ public class JsonNodeHelper {
             throw new RuntimeException(String.format("JsonNode für '%s' ist nicht gefüllt!", nodeName));
         }
         return jsonNode;
+    }
+
+    public JsonNode getJsonNodeData() {
+        return jsonNodeData;
     }
 }

@@ -224,7 +224,7 @@ public class CteActivitiServiceRestImpl implements CteActivitiService {
 
     public List<CteActivitiExecution> getExecutions(Integer processInstanceID) throws Exception {
         // GET runtime/executions
-        List<CteActivitiExecution> cteActivitiExecutionList = new ArrayList<CteActivitiExecution>();
+        List<CteActivitiExecution> cteActivitiExecutionList = new ArrayList<>();
         restServiceInvoker.init(restTimeoutInMillis);
         restServiceInvoker.appendPath(extendsRestUrls(RestUrls.URL_EXECUTION_COLLECTION));
         if (processInstanceID != null) {
@@ -289,7 +289,7 @@ public class CteActivitiServiceRestImpl implements CteActivitiService {
         // GET runtime/process-instances
         restServiceInvoker.init(restTimeoutInMillis);
         restServiceInvoker.appendPath(extendsRestUrls(RestUrls.URL_PROCESS_INSTANCE), processInstanceID.toString());
-        LOGGER.debug(formatRequest("getProcessInstanceByID", "GET", restServiceInvoker, "processInstanceId = \" + processInstanceId"));
+        LOGGER.debug(formatRequest("getProcessInstanceByID", "GET", restServiceInvoker, "processInstanceId = " + processInstanceID));
         RestInvokerResponse restInvokerResponse = restServiceInvoker.invokeGet(RestInvoker.CONTENT_TYPE_JSON);
         String responseBody = restInvokerResponse.expectStatusOK().getResponseBody();
         LOGGER.debug(formatResponseBody(null, responseBody));

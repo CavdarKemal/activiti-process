@@ -62,6 +62,17 @@ public class CteActivitiServiceRestImplValidationTest {
     }
 
     // =======================================================================
+    // Fix #11: JsonNodeHelper.jsonNodeData ist private (mit getter)
+    // =======================================================================
+
+    @Test
+    public void testJsonNodeHelper_jsonNodeDataIstPrivate() throws Exception {
+        java.lang.reflect.Field field = JsonNodeHelper.class.getDeclaredField("jsonNodeData");
+        assertTrue("jsonNodeData muss private sein",
+                java.lang.reflect.Modifier.isPrivate(field.getModifiers()));
+    }
+
+    // =======================================================================
     // Fix #6: Leerer catch-Block in formatJsonString
     // =======================================================================
 

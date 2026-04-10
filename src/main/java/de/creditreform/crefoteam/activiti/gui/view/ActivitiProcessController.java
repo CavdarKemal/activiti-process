@@ -107,7 +107,8 @@ public class ActivitiProcessController {
                         currentTask.getTaskDefinitionKey(), currentTask.getName(),
                         phase != null ? "\nPhase: " + phase : "");
             }
-        } catch (Exception ignore) {
+        } catch (Exception ex) {
+            callback.onLog("Konnte aktuellen Task nicht ermitteln: " + ex.getMessage());
         }
 
         int choice = callback.onExistingProcessFound(existing.size(), meinKey, currentTaskInfo);

@@ -24,10 +24,6 @@ public class CteActivitiVariableImpl implements CteActivitiVariable {
     }
 
     private JsonNode getJsonNode(String nodeName) {
-        JsonNode jsonNode = jsonNodeHelper.jsonNodeData.get(nodeName);
-        if (jsonNode == null) {
-            throw new RuntimeException(String.format("JsonNode für '%s' ist nicht gefüllt!", nodeName));
-        }
-        return jsonNode;
+        return jsonNodeHelper.getJsonNode(nodeName);
     }
 }
