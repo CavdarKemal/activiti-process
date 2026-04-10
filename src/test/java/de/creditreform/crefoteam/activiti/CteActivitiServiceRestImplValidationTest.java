@@ -62,6 +62,32 @@ public class CteActivitiServiceRestImplValidationTest {
     }
 
     // =======================================================================
+    // Fix #6: Leerer catch-Block in formatJsonString
+    // =======================================================================
+
+    @Test
+    public void testFormatJsonString_keinLeererCatchBlock() throws Exception {
+        File src = new File("src/main/java/de/creditreform/crefoteam/activiti/CteActivitiServiceRestImpl.java");
+        String content = new String(Files.readAllBytes(src.toPath()));
+        assertFalse("formatJsonString darf keinen leeren catch mehr haben", content.contains("// dann eben nicht!"));
+    }
+
+    // =======================================================================
+    // Fix #7: FileUtils mit explizitem UTF-8 Charset
+    // =======================================================================
+
+    @Test
+    public void testPrepareBpmnFileForEnvironment_nutztUtf8Charset() throws Exception {
+        File src = new File("src/main/java/de/creditreform/crefoteam/activiti/CteActivitiServiceRestImpl.java");
+        String content = new String(Files.readAllBytes(src.toPath()));
+        assertFalse("readFileToString darf nicht ohne Charset aufgerufen werden",
+                content.contains("FileUtils.readFileToString(srcFile);"));
+        assertFalse("writeStringToFile darf nicht ohne Charset aufgerufen werden",
+                content.contains("FileUtils.writeStringToFile(dstFile, newContent);"));
+        assertTrue("readFileToString muss UTF_8 nutzen", content.contains("readFileToString(srcFile, java.nio.charset.StandardCharsets.UTF_8)"));
+    }
+
+    // =======================================================================
     // Fix #5: deleteTask Query-Param ohne falschen ?-Prefix
     // =======================================================================
 

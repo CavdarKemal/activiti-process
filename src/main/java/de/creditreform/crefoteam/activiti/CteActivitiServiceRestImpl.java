@@ -560,7 +560,7 @@ public class CteActivitiServiceRestImpl implements CteActivitiService {
             Object json = objectMapper.readValue(jsonString, Object.class);
             return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
         } catch (Exception ex) {
-            // dann eben nicht!
+            LOGGER.trace("formatJsonString: konnte nicht als JSON parsen, gebe Original zurueck: {}", ex.getMessage());
         }
         return jsonString;
     }
@@ -586,9 +586,9 @@ public class CteActivitiServiceRestImpl implements CteActivitiService {
     public File prepareBpmnFileForEnvironment(String bpmnFileName, String envName) throws Exception {
         File srcFile = new File(bpmnFileName);
         File dstFile = new File(System.getProperty("user.dir"), String.format("%s-%s", envName, srcFile.getName()));
-        String oldContent = FileUtils.readFileToString(srcFile);
+        String oldContent = FileUtils.readFileToString(srcFile, java.nio.charset.StandardCharsets.UTF_8);
         String newContent = oldContent.replaceAll("%ENV%", envName);
-        FileUtils.writeStringToFile(dstFile, newContent);
+        FileUtils.writeStringToFile(dstFile, newContent, java.nio.charset.StandardCharsets.UTF_8);
         return dstFile;
     }
 
