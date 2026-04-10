@@ -34,6 +34,6 @@ public class RestInvokerActiviti extends RestInvokerApache4 {
 
     @Override
     public String toString() {
-        return String.format("URL: %s:%s@%s", getUserName(), getPassword(), getRestURI());
+        return String.format("URL: %s:***@%s", getUserName(), getRestURI());
     }
 }
