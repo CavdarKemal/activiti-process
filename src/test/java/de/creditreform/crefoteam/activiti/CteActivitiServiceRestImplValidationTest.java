@@ -62,6 +62,30 @@ public class CteActivitiServiceRestImplValidationTest {
     }
 
     // =======================================================================
+    // Fix #9: getProcessInstanceByID Log-Message ohne hardcoded Stringliteral
+    // =======================================================================
+
+    @Test
+    public void testGetProcessInstanceByID_logMessageNutztVariable() throws Exception {
+        File src = new File("src/main/java/de/creditreform/crefoteam/activiti/CteActivitiServiceRestImpl.java");
+        String content = new String(Files.readAllBytes(src.toPath()));
+        assertFalse("Log-Message darf den falschen escaped String nicht mehr enthalten",
+                content.contains("\"processInstanceId = \\\" + processInstanceId\""));
+    }
+
+    // =======================================================================
+    // Fix #10: Diamond-Operator statt expliziter Generic-Typ
+    // =======================================================================
+
+    @Test
+    public void testGetExecutions_nutztDiamondOperator() throws Exception {
+        File src = new File("src/main/java/de/creditreform/crefoteam/activiti/CteActivitiServiceRestImpl.java");
+        String content = new String(Files.readAllBytes(src.toPath()));
+        assertFalse("Raw-ArrayList<CteActivitiExecution>() darf nicht mehr verwendet werden",
+                content.contains("new ArrayList<CteActivitiExecution>()"));
+    }
+
+    // =======================================================================
     // Fix #11: JsonNodeHelper.jsonNodeData ist private (mit getter)
     // =======================================================================
 
