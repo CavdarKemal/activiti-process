@@ -4,6 +4,10 @@ import de.creditreform.crefoteam.cte.rest.RestInvokerConfig;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static de.creditreform.crefoteam.activiti.ActivitiJunitConstants.*;
 import static org.junit.Assert.*;
 
@@ -55,6 +59,18 @@ public class CteActivitiServiceRestImplValidationTest {
         // Die Timeout-Message muss die korrekte Sekundenzahl enthalten
         assertTrue("Default-Timeout muss > 0 Sekunden sein", expectedSeconds > 0);
         assertFalse("Message darf nicht die rohen Millisekunden enthalten", String.valueOf(timeoutMs).equals(String.valueOf(expectedSeconds)));
+    }
+
+    // =======================================================================
+    // Fix #5: deleteTask Query-Param ohne falschen ?-Prefix
+    // =======================================================================
+
+    @Test
+    public void testDeleteTask_queryParamHatKeinFragezeichenPrefix() throws Exception {
+        File src = new File("src/main/java/de/creditreform/crefoteam/activiti/CteActivitiServiceRestImpl.java");
+        String content = new String(Files.readAllBytes(src.toPath()));
+        assertFalse("queryParam darf kein '?cascadeHistory' (mit ?-Prefix) enthalten", content.contains("queryParam(\"?cascadeHistory\""));
+        assertTrue("queryParam muss 'cascadeHistory' (ohne ?) enthalten", content.contains("queryParam(\"cascadeHistory\""));
     }
 
     // =======================================================================

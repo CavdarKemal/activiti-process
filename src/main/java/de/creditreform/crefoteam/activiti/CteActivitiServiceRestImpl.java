@@ -380,7 +380,7 @@ public class CteActivitiServiceRestImpl implements CteActivitiService {
         // DELETE runtime/tasks/{taskId}?cascadeHistory={cascadeHistory}&deleteReason={deleteReason}
         restServiceInvoker.init(restTimeoutInMillis);
         restServiceInvoker.appendPath(extendsRestUrls(RestUrls.URL_TASK), taskID.toString());
-        restServiceInvoker.queryParam("?cascadeHistory", "true");
+        restServiceInvoker.queryParam("cascadeHistory", "true");
         LOGGER.debug(formatRequest("deleteTask", "DELETE", restServiceInvoker, ""));
         RestInvokerResponse restInvokerResponse = restServiceInvoker.invokeDelete(RestInvoker.CONTENT_TYPE_JSON);
         LOGGER.debug(formatResponseBody(null, restInvokerResponse.getResponseBody()));
