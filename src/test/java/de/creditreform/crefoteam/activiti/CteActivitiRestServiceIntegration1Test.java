@@ -139,8 +139,10 @@ public class CteActivitiRestServiceIntegration1Test extends RestIntegrationTestB
     }
 
     private void writeProcessImageToFile(InputStream processImageIS, String fileName) throws Exception {
-        File targetFile = new File(fileName);
+        File tempDir = new File(System.getProperty("java.io.tmpdir"));
+        File targetFile = new File(tempDir, new File(fileName).getName());
         FileUtils.copyInputStreamToFile(processImageIS, targetFile);
+        targetFile.deleteOnExit();
     }
 
 }
