@@ -28,6 +28,7 @@
         <wiremock.version>1.58</wiremock.version>
         <h2.version>1.4.196</h2.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+        <jacoco.version>0.8.11</jacoco.version>
     </properties>
 
     <profiles>
@@ -46,7 +47,7 @@
                                     <include>**/*Test.java</include>
                                     <include>**/Test*.java</include>
                                 </includes>
-                                <argLine>-Duser.language=de -Duser.region=DE -Xmx2048m -Dfile.encoding=${project.build.sourceEncoding}
+                                <argLine>@{argLine} -Duser.language=de -Duser.region=DE -Xmx2048m -Dfile.encoding=${project.build.sourceEncoding}
                                 </argLine>
                             </configuration>
                         </plugin>
@@ -68,7 +69,7 @@
                                 <excludes>
                                     <exclude>**/*IntegrationTest*.java</exclude>
                                 </excludes>
-                                <argLine>-Duser.language=de -Duser.region=DE -Xmx1024m
+                                <argLine>@{argLine} -Duser.language=de -Duser.region=DE -Xmx1024m
                                     -Dfile.encoding=${project.build.sourceEncoding}
                                 </argLine>
                             </configuration>
@@ -91,6 +92,27 @@
                         <id>attach-sources</id>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- JaCoCo Code Coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
