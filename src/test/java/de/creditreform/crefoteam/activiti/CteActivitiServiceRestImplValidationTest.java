@@ -156,4 +156,133 @@ public class CteActivitiServiceRestImplValidationTest {
             assertFalse("Fehler darf keine NPE sein", e instanceof NullPointerException);
         }
     }
+
+    // =======================================================================
+    // extendsRestUrls - statische Hilfsmethode
+    // =======================================================================
+
+    @Test
+    public void testExtendsRestUrls_einfachesArray() {
+        String[] restUrlArray = {"runtime", "process-instances"};
+        String result = CteActivitiServiceRestImpl.extendsRestUrls(restUrlArray);
+        assertEquals("activiti-rest/service/runtime/process-instances", result);
+    }
+
+    @Test
+    public void testExtendsRestUrls_leeresArray() {
+        String[] restUrlArray = {};
+        String result = CteActivitiServiceRestImpl.extendsRestUrls(restUrlArray);
+        assertEquals("activiti-rest/service", result);
+    }
+
+    @Test
+    public void testExtendsRestUrls_einElement() {
+        String[] restUrlArray = {"repository"};
+        String result = CteActivitiServiceRestImpl.extendsRestUrls(restUrlArray);
+        assertEquals("activiti-rest/service/repository", result);
+    }
+
+    @Test
+    public void testExtendsRestUrls_mitPlaceholder() {
+        String[] restUrlArray = {"runtime", "process-instances", "{processInstanceId}"};
+        String result = CteActivitiServiceRestImpl.extendsRestUrls(restUrlArray);
+        assertTrue("Ergebnis muss SERVICE_PATH enthalten", result.startsWith(CteActivitiService.SERVICE_PATH));
+        assertTrue("Ergebnis muss Placeholder enthalten", result.contains("{processInstanceId}"));
+    }
+
+    // =======================================================================
+    // Konstruktor-Tests
+    // =======================================================================
+
+    @Test
+    public void testKonstruktor_mitTimeout() {
+        RestInvokerConfig config = new RestInvokerConfig(JUNIT_ACTIVITI_URL, JUNIT_ACTIVITI_USER, JUNIT_ACTIVITI_PWD);
+        int customTimeout = 60000;
+        CteActivitiServiceRestImpl serviceWithTimeout = new CteActivitiServiceRestImpl(config, customTimeout);
+        assertEquals(customTimeout, serviceWithTimeout.getRestTimeoutInMillis());
+    }
+
+    @Test
+    public void testKonstruktor_defaultTimeout() {
+        assertEquals(CteActivitiService.REST_TIME_OUT_IN_MILLIS, service.getRestTimeoutInMillis());
+    }
+
+    @Test
+    public void testGetActivitiRestInvokerConfig() {
+        RestInvokerConfig config = service.getActivitiRestInvokerConfig();
+        assertNotNull(config);
+        assertEquals(JUNIT_ACTIVITI_URL, config.getServiceURL());
+    }
+
+    @Test
+    public void testGetRestServiceInvoker() {
+        assertNotNull(service.getRestServiceInvoker());
+    }
+
+    // =======================================================================
+    // startProcess - Validierung
+    // =======================================================================
+
+    @Test(expected = RuntimeException.class)
+    public void testStartProcess_nullProcessDefinitionKey_wirftRuntimeException() throws Exception {
+        service.startProcess(null, new java.util.HashMap<>());
+    }
+
+    // =======================================================================
+    // listTasks - Null-Safety Tests (laufen gegen echten Server)
+    // =======================================================================
+
+    @Test
+    public void testListTasks_mitNullParams_keineNPE() throws Exception {
+        // Test dass null-Parameter keine NPE verursachen
+        // Server laeuft, daher wird eine leere Liste zurueckgegeben
+        java.util.List<CteActivitiTask> result = service.listTasks(null);
+        assertNotNull("Ergebnis darf nicht null sein", result);
+    }
+
+    @Test
+    public void testListTasks_mitLeererMap_keineNPE() throws Exception {
+        java.util.List<CteActivitiTask> result = service.listTasks(new java.util.HashMap<>());
+        assertNotNull("Ergebnis darf nicht null sein", result);
+    }
+
+    @Test
+    public void testListTasks_mitActivitiProcessName_keineNPE() throws Exception {
+        java.util.Map<String, Object> params = new java.util.HashMap<>();
+        params.put("ACTIVITI_PROCESS_NAME", "NonExistentProcess");
+        java.util.List<CteActivitiTask> result = service.listTasks(params);
+        assertNotNull("Ergebnis darf nicht null sein", result);
+    }
+
+    @Test
+    public void testListTasks_mitKleinbuchstabeKey_keineNPE() throws Exception {
+        java.util.Map<String, Object> params = new java.util.HashMap<>();
+        params.put("processInstanceId", "99999999");
+        java.util.List<CteActivitiTask> result = service.listTasks(params);
+        assertNotNull("Ergebnis darf nicht null sein", result);
+    }
+
+    @Test
+    public void testListTasks_mitProzessVariable_keineNPE() throws Exception {
+        java.util.Map<String, Object> params = new java.util.HashMap<>();
+        params.put("MEIN_KEY", "nonExistentValue");
+        java.util.List<CteActivitiTask> result = service.listTasks(params);
+        assertNotNull("Ergebnis darf nicht null sein", result);
+    }
+
+    // =======================================================================
+    // queryProcessInstances - Null-Safety Tests
+    // =======================================================================
+
+    @Test
+    public void testQueryProcessInstances_mitNullParamsMap_keineNPE() throws Exception {
+        java.util.List<CteActivitiProcess> result = service.queryProcessInstances("NonExistentProcess", null);
+        assertNotNull("Ergebnis darf nicht null sein", result);
+    }
+
+    @Test
+    public void testQueryProcessInstances_mitLeererParamsMap_keineNPE() throws Exception {
+        java.util.List<CteActivitiProcess> result = service.queryProcessInstances("NonExistentProcess", new java.util.HashMap<>());
+        assertNotNull("Ergebnis darf nicht null sein", result);
+    }
 }
