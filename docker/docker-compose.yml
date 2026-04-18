@@ -14,7 +14,7 @@
 # Siehe auch: docker-compose-a5.yml fuer Activiti 5 (Port 9091)
 # =============================================================================
 
-name: TestSupportClient
+name: ACTIVITI-6
 
 services:
 
@@ -27,11 +27,13 @@ services:
   # ---------------------------------------------------------------------------
   activiti-db:
     image: postgres:15-alpine
-    container_name: TestSupportClient-activiti6-db
+    container_name: ACTIVITI-6-db
     environment:
       POSTGRES_DB: activiti        # Datenbankname, den Activiti erwartet
       POSTGRES_USER: postgres      # Standard-DB-User
       POSTGRES_PASSWORD: postgres  # Standard-DB-Passwort
+    ports:
+      - "5433:5432"                # Host-Port 5433 → MCP-Zugriff fuer Claude
     tmpfs:
       - /var/lib/postgresql/data   # RAM-Disk: kein persistenter Speicher
     healthcheck:
@@ -53,7 +55,7 @@ services:
   activiti:
     build: .
     image: activiti6:latest
-    container_name: TestSupportClient-activiti6
+    container_name: ACTIVITI-6
     ports:
       - "${ACTIVITI_PORT:-9090}:8080"  # Activiti REST + App (Tomcat)
       - "2525:25"                      # SMTP-Sink fuer Test-E-Mails
