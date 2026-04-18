@@ -14,7 +14,7 @@
 # Stoppen:  docker compose -f docker-compose-a5.yml down
 # Logs:     docker compose -f docker-compose-a5.yml logs -f activiti5
 #
-# Siehe auch: docker-compose.yml fuer Activiti 6 (Port 9090)
+# Siehe auch: docker-compose-a6.yml fuer Activiti 6 (Port 9090)
 # =============================================================================
 
 name: ACTIVITI-5

@@ -32,7 +32,7 @@ docker load -i activiti6.tar
 docker load -i postgres-15-alpine.tar
 ```
 
-Dann `docker-compose.yml` (aus dem Elternverzeichnis) und `start.cmd` kopieren.
+Dann `docker-compose-a6.yml` (aus dem Elternverzeichnis) und `start.cmd` kopieren.
 
 ## Hinweis: BuildKit
 

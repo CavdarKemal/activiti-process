@@ -4,6 +4,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$SCRIPT_DIR"
 
 echo "Baue Activiti 6 Docker-Image..."
-docker compose build
+docker compose -f docker-compose-a6.yml build
 echo ""
 echo "Fertig! Starten mit: linux/start.sh"

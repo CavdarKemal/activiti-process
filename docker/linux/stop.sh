@@ -3,5 +3,5 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$SCRIPT_DIR"
 
-docker compose down
+docker compose -f docker-compose-a6.yml down
 echo "Activiti 6.0 gestoppt."

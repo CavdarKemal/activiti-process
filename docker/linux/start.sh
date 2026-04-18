@@ -12,4 +12,4 @@ echo "  REST API:      http://$(hostname):${ACTIVITI_PORT}/activiti-rest/service
 echo "  User werden automatisch angelegt (init-users.sql)"
 echo ""
 
-docker compose up "$@"
+docker compose -f docker-compose-a6.yml up "$@"

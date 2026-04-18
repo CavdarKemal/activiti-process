@@ -8,4 +8,4 @@ echo   Activiti App:  http://localhost:%ACTIVITI_PORT%/activiti-app  (kermit/ker
 echo   REST API:      http://localhost:%ACTIVITI_PORT%/activiti-rest/service  (kermit/kermit)
 echo   Port aendern:  set ACTIVITI_PORT=xxxx vor dem Start
 echo.
-docker-compose up
+docker compose -f docker-compose-a6.yml up

@@ -7,9 +7,9 @@
 # Zugehoerige Konfiguration in ENE-config.properties:
 #   ACTIVITI_URLS = ...::http://localhost:9090   (zweiter Eintrag)
 #
-# Starten:  docker compose up -d
-# Stoppen:  docker compose down
-# Logs:     docker compose logs -f activiti
+# Starten:  docker compose -f docker-compose-a6.yml up -d
+# Stoppen:  docker compose -f docker-compose-a6.yml down
+# Logs:     docker compose -f docker-compose-a6.yml logs -f activiti
 #
 # Siehe auch: docker-compose-a5.yml fuer Activiti 5 (Port 9091)
 # =============================================================================

@@ -9,7 +9,8 @@ Docker-Setup fuer Activiti 6.0.0 mit PostgreSQL. Die Datenbank ist bei jedem Sta
 ```
 docker/
 ├── Dockerfile                  Image-Definition (Tomcat 9 + JDK 11 + Activiti 6)
-├── docker-compose.yml          Container-Orchestrierung (Activiti + PostgreSQL)
+├── docker-compose-a6.yml       Container-Orchestrierung Activiti 6 (+ PostgreSQL)
+├── docker-compose-a5.yml       Container-Orchestrierung Activiti 5 (+ PostgreSQL)
 ├── db.properties               REST-API DB-Konfiguration
 ├── activiti-app.properties     App DB-Konfiguration
 ├── engine.properties           Engine-Einstellungen
