@@ -1,6 +1,8 @@
-# Activiti 6.0 Docker
+# Activiti Docker
 
-Docker-Setup fuer Activiti 6.0.0 mit PostgreSQL. Die Datenbank ist bei jedem Start frisch. User werden automatisch angelegt.
+Docker-Setup fuer **Activiti 6.0.0** (Port 9090) und **Activiti 5.19.0** (Port 9091) — beide mit eigener PostgreSQL. Datenbank ist bei jedem Start frisch, User werden automatisch angelegt.
+
+Beide Stacks laufen parallel (Compose-Projektnamen `ACTIVITI-6` bzw. `ACTIVITI-5`), die `TestSupportViewActivitiTest`-JUnit-Tests in `testsupport_client` sprechen beide an (A5 = `configs.get(0)`, A6 = `configs.get(1)` in `ENE-config.properties`).
 
 ---
 
@@ -8,26 +10,37 @@ Docker-Setup fuer Activiti 6.0.0 mit PostgreSQL. Die Datenbank ist bei jedem Sta
 
 ```
 docker/
-├── Dockerfile                  Image-Definition (Tomcat 9 + JDK 11 + Activiti 6)
+├── Dockerfile                  Activiti 6 Image (Tomcat 9 + JDK 11 + Activiti 6)
 ├── docker-compose-a6.yml       Container-Orchestrierung Activiti 6 (+ PostgreSQL)
 ├── docker-compose-a5.yml       Container-Orchestrierung Activiti 5 (+ PostgreSQL)
-├── db.properties               REST-API DB-Konfiguration
-├── activiti-app.properties     App DB-Konfiguration
-├── engine.properties           Engine-Einstellungen
+├── db.properties               REST-API DB-Konfiguration (A6)
+├── activiti-app.properties     App DB-Konfiguration (A6)
+├── engine.properties           Engine-Einstellungen (A6)
 ├── init-users.sql              Automatische User-Erstellung beim Start
 ├── startup.sh                  Container-Startscript (Tomcat + User-Init)
-├── activiti6.tar               Exportiertes Activiti-Image (plattformunabhaengig)
+├── activiti6.tar               Exportiertes A6-Image (plattformunabhaengig)
 ├── postgres-15-alpine.tar      Exportiertes PostgreSQL-Image (plattformunabhaengig)
 ├── README.md                   Diese Datei
 │
+├── activiti5/                  Activiti-5 Build-Kontext (Dockerfile + Configs)
+│   ├── Dockerfile              Activiti 5 Image (Tomcat 9 + JDK 8 + Activiti 5)
+│   ├── db.properties
+│   ├── engine.properties
+│   ├── init-users.sql
+│   ├── startup.sh
+│   ├── smtp-sink.py
+│   └── process-explorer/
+│
 ├── windows/                    Windows-spezifische Scripts
 │   ├── README.md
-│   ├── build.cmd               Image bauen
-│   ├── start.cmd               Container starten
-│   ├── stop.cmd                Container stoppen
-│   └── export.cmd              Images als tar exportieren
+│   ├── build.cmd               Activiti-6 Image bauen
+│   ├── start.cmd               Activiti-6 Container starten
+│   ├── stop.cmd                Activiti-6 Container stoppen
+│   ├── export.cmd              A6-Images als tar exportieren
+│   ├── build-a5.cmd            Activiti-5 Image bauen
+│   └── start-a5.cmd            Activiti-5 Container starten
 │
-└── linux/                      Linux-spezifische Scripts
+└── linux/                      Linux-spezifische Scripts (Activiti-6)
     ├── README.md
     ├── build.sh                Image bauen
     ├── start.sh                Container starten
@@ -46,11 +59,29 @@ docker/
 
 ## Zugriff
 
+### Activiti 6 (Port 9090)
+
 | URL | Beschreibung | Login |
 |---|---|---|
 | http://HOST:9090/ | Startseite mit Links | - |
 | http://HOST:9090/activiti-app | Web-UI (Prozess-Designer, Tasks) | `kermit` / `kermit` |
 | http://HOST:9090/activiti-rest/service | REST API | `kermit` / `kermit` |
+
+### Activiti 5 (Port 9091)
+
+| URL | Beschreibung | Login |
+|---|---|---|
+| http://HOST:9091/activiti-rest/service | REST API | `kermit` / `kermit` |
+| http://HOST:9091/process-explorer | Process Explorer | - |
+
+Activiti 5 hat **keine** Activiti-App (Web-UI), nur REST-API + Process-Explorer.
+
+### Container- und DB-Ports
+
+| Compose-Stack | Activiti (Host → Container) | PostgreSQL (Host → Container) | SMTP-Sink |
+|---|---|---|---|
+| `ACTIVITI-6` | `9090:8080` | `5433:5432` | `2525:25` |
+| `ACTIVITI-5` | `9091:8080` | `5434:5432` | `2526:25` |
 
 ## Automatisch angelegte User
 
@@ -70,9 +101,59 @@ User werden automatisch beim Container-Start angelegt (via `init-users.sql`). Ne
 
 ---
 
+## Schnellstart
+
+### Aus dem `docker/`-Verzeichnis
+
+```bash
+# Activiti 6 starten (Port 9090)
+docker compose -f docker-compose-a6.yml up -d
+
+# Activiti 5 starten (Port 9091)
+docker compose -f docker-compose-a5.yml up -d
+
+# Status pruefen
+docker ps --format "{{.Names}}\t{{.Ports}}"
+```
+
+Erwartetes Ergebnis:
+```
+ACTIVITI-5      0.0.0.0:2526->25/tcp, 0.0.0.0:9091->8080/tcp
+ACTIVITI-5-db   0.0.0.0:5434->5432/tcp
+ACTIVITI-6      0.0.0.0:2525->25/tcp, 0.0.0.0:9090->8080/tcp
+ACTIVITI-6-db   0.0.0.0:5433->5432/tcp
+```
+
+### Windows-Scripts
+
+```cmd
+windows\build.cmd        REM A6 Image bauen (einmalig)
+windows\start.cmd        REM A6 Container starten
+windows\stop.cmd         REM A6 Container stoppen
+windows\build-a5.cmd     REM A5 Image bauen (einmalig)
+windows\start-a5.cmd     REM A5 Container starten
+```
+
+A5 hat aktuell kein `stop-a5.cmd`; zum Stoppen:
+```cmd
+docker compose -f docker-compose-a5.yml down
+```
+
+### Linux-Scripts (Activiti 6)
+
+```bash
+linux/build.sh           # Image bauen
+linux/start.sh           # Container starten
+linux/stop.sh            # Container stoppen
+```
+
+Fuer Activiti 5 gibt es keine Linux-Scripts — direkt mit `docker compose -f docker-compose-a5.yml {up -d,down}` arbeiten.
+
+---
+
 ## Frische DB bei jedem Start
 
-Die PostgreSQL-Datenbank laeuft auf `tmpfs` (RAM-Disk). Bei jedem `stop` + `start` wird die DB komplett neu erstellt:
+Beide PostgreSQL-Datenbanken laufen auf `tmpfs` (RAM-Disk). Bei jedem `down` + `up` wird die DB komplett neu erstellt:
 - Activiti-Schema wird automatisch angelegt
 - Demo-User und -Prozesse werden deployed
 - Eigene User werden aus `init-users.sql` angelegt
@@ -82,9 +163,12 @@ Die PostgreSQL-Datenbank laeuft auf `tmpfs` (RAM-Disk). Bei jedem `stop` + `star
 
 ## Container-Architektur
 
+Zwei unabhaengige Compose-Stacks. Jeder besteht aus einem Activiti- und einem Postgres-Container.
+
 ```
+ACTIVITI-6 (docker-compose-a6.yml)
 ┌─────────────────────────────────────────────────┐
-│  activiti (Port 9090 -> 8080)                   │
+│  ACTIVITI-6 (Port 9090 -> 8080)                 │
 │  ├── Tomcat 9.0                                 │
 │  ├── JDK 11 (Temurin)                           │
 │  ├── activiti-rest.war   (REST API)             │
@@ -93,26 +177,41 @@ Die PostgreSQL-Datenbank laeuft auf `tmpfs` (RAM-Disk). Bei jedem `stop` + `star
 │  ├── startup.sh          (Tomcat + User-Init)   │
 │  └── init-users.sql      (User-Definitionen)    │
 ├─────────────────────────────────────────────────┤
-│  activiti-db                                    │
+│  ACTIVITI-6-db (Host-Port 5433)                 │
 │  ├── PostgreSQL 15 (Alpine)                     │
 │  ├── DB: activiti                               │
 │  ├── User: postgres / postgres                  │
 │  └── tmpfs (RAM-Disk, keine Persistenz)         │
 └─────────────────────────────────────────────────┘
+
+ACTIVITI-5 (docker-compose-a5.yml)
+┌─────────────────────────────────────────────────┐
+│  ACTIVITI-5 (Port 9091 -> 8080)                 │
+│  ├── Tomcat 9.0                                 │
+│  ├── JDK 8                                      │
+│  ├── activiti-rest.war   (REST API, keine App)  │
+│  └── process-explorer                           │
+├─────────────────────────────────────────────────┤
+│  ACTIVITI-5-db (Host-Port 5434)                 │
+│  ├── PostgreSQL 15 (Alpine)                     │
+│  ├── DB: activiti                               │
+│  └── tmpfs (RAM-Disk)                           │
+└─────────────────────────────────────────────────┘
 ```
 
 ## Port aendern
 
-Falls Port 9090 belegt ist:
-- **Windows:** `set ACTIVITI_PORT=8080` vor `start.cmd`
-- **Linux:** `ACTIVITI_PORT=8080 linux/start.sh`
+- **Activiti 6**, Windows: `set ACTIVITI_PORT=8080` vor `start.cmd`
+- **Activiti 6**, Linux: `ACTIVITI_PORT=8080 linux/start.sh`
+- **Activiti 5**, Windows: `set ACTIVITI5_PORT=8081` vor `start-a5.cmd`
+- **Activiti 5**, Linux: `ACTIVITI5_PORT=8081 docker compose -f docker-compose-a5.yml up -d`
 
 ---
 
 ## Neue User hinzufuegen
 
-1. `init-users.sql` bearbeiten (INSERT-Statements ergaenzen)
-2. Image neu bauen: `windows\build.cmd` bzw. `linux/build.sh`
+1. `init-users.sql` (A6) bzw. `activiti5/init-users.sql` (A5) bearbeiten (INSERT-Statements ergaenzen)
+2. Image neu bauen (`build.cmd`/`build-a5.cmd` bzw. `linux/build.sh`)
 3. Container neu starten
 
 ---
@@ -135,6 +234,14 @@ sed -i 's/\r$//' *.sh
 
 Die tar-Dateien (`activiti6.tar`, `postgres-15-alpine.tar`) liegen im `docker/`-Hauptverzeichnis und sind **plattformunabhaengig** (Linux amd64). Sie koennen sowohl auf Windows als auch auf Linux importiert werden.
 
+### Stale Container nach Umbenennung
+
+Falls Container mit alten Namen (`docker-activiti-1`, `TestSupportClient-activiti6` etc.) existieren und Port 9090/9091 belegen, zuerst aufraeumen:
+
+```powershell
+docker rm -f docker-activiti-1 docker-activiti-db-1 docker-activiti5-1 docker-activiti5-db-1 TestSupportClient-activiti6 TestSupportClient-activiti6-db TestSupportClient-activiti5 TestSupportClient-activiti5-db my_activiti 2>$null
+```
+
 ---
 
-Erstellt: 18. Maerz 2026
+Zuletzt aktualisiert: 19. April 2026
