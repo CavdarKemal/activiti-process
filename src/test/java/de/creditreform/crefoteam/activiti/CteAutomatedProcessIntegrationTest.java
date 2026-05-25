@@ -84,7 +84,6 @@ public class CteAutomatedProcessIntegrationTest extends RestIntegrationTestBase 
         // Prozess starten
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put(ActivitProcessConstants.UT_TASK_PARAM_NAME_MEIN_KEY, MEIN_KEY);
-        paramsMap.put(ActivitProcessConstants.UT_TASK_PARAM_NAME_TEST_TYPE, "PHASE1_AND_PHASE2");
         paramsMap.put("TIME_BEFORE_BTLG_IMPORT", "0");
         paramsMap.put("TIME_BEFORE_CT_IMPORT", "0");
         paramsMap.put("TIME_BEFORE_EXPORT", "0");

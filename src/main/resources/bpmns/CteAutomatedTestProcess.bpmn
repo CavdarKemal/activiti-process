@@ -6,7 +6,6 @@
   <message id="checkingExportsErrorMessage" name="checkingExportsErrorMessage"></message>
   <process id="%ENV%-TestAutomationProcess" name="CTE %ENV%-Test-Automatisierung" isExecutable="true">
     <extensionElements>
-      <activiti:in xmlns:activiti="http://activiti.org/bpmn" source="TEST_TYPE" target="TEST_TYPE"></activiti:in>
       <activiti:in xmlns:activiti="http://activiti.org/bpmn" source="MEIN_KEY" target="MEIN_KEY"></activiti:in>
       <activiti:in xmlns:activiti="http://activiti.org/bpmn" source="TIME_BEFORE_BTLG_IMPORT" target="TIME_BEFORE_BTLG_IMPORT"></activiti:in>
       <activiti:in xmlns:activiti="http://activiti.org/bpmn" source="TIME_BEFORE_CT_IMPORT" target="TIME_BEFORE_CT_IMPORT"></activiti:in>
@@ -15,13 +14,13 @@
       <activiti:in xmlns:activiti="http://activiti.org/bpmn" source="COLLECTED_DIR" target="COLLECTED_DIR"></activiti:in>
     </extensionElements>
     <startEvent id="startEvent" name="Start" activiti:initiator="initiator"></startEvent>
-    <callActivity id="CallActivityRepeatableTestAutomationProcess2SUB1" name="Sub-Prozess Phase-1" calledElement="%ENV%TestAutomationProcessRT2SUB">
+    <callActivity id="CallActivityRepeatableTestAutomationProcessSUB1" name="Sub-Prozess Phase-1" calledElement="%ENV%TestAutomationProcessSUB">
       <extensionElements>
         <activiti:in sourceExpression="${'PHASE_1'}" target="TEST_PHASE"></activiti:in>
         <activiti:in source="MEIN_KEY" target="MEIN_KEY"></activiti:in>
       </extensionElements>
     </callActivity>
-    <callActivity id="CallActivityRepeatableTestAutomationProcess2SUB2" name="Sub-Prozess Phase-2" calledElement="%ENV%TestAutomationProcessRT2SUB">
+    <callActivity id="CallActivityRepeatableTestAutomationProcessSUB2" name="Sub-Prozess Phase-2" calledElement="%ENV%TestAutomationProcessSUB">
       <extensionElements>
         <activiti:in sourceExpression="${'PHASE_2'}" target="TEST_PHASE"></activiti:in>
         <activiti:in source="MEIN_KEY" target="MEIN_KEY"></activiti:in>
@@ -34,15 +33,15 @@
     <userTask id="UserTaskFailureMail" name="Fehler-Mail"></userTask>
     <sequenceFlow id="flow44" sourceRef="startEvent" targetRef="UserTaskPrepareTestSystem"></sequenceFlow>
     <userTask id="UserTaskGeneratePseudoCrefos" name="Pseudo Crefos erzeugen [GeneratePseudoCrefos]"></userTask>
-    <sequenceFlow id="flow45" sourceRef="UserTaskGeneratePseudoCrefos" targetRef="CallActivityRepeatableTestAutomationProcess2SUB1"></sequenceFlow>
-    <sequenceFlow id="flow48" sourceRef="CallActivityRepeatableTestAutomationProcess2SUB1" targetRef="CallActivityRepeatableTestAutomationProcess2SUB2"></sequenceFlow>
-    <sequenceFlow id="flow49" sourceRef="CallActivityRepeatableTestAutomationProcess2SUB2" targetRef="UserTaskSuccessMail"></sequenceFlow>
+    <sequenceFlow id="flow45" sourceRef="UserTaskGeneratePseudoCrefos" targetRef="CallActivityRepeatableTestAutomationProcessSUB1"></sequenceFlow>
+    <sequenceFlow id="flow48" sourceRef="CallActivityRepeatableTestAutomationProcessSUB1" targetRef="CallActivityRepeatableTestAutomationProcessSUB2"></sequenceFlow>
+    <sequenceFlow id="flow49" sourceRef="CallActivityRepeatableTestAutomationProcessSUB2" targetRef="UserTaskSuccessMail"></sequenceFlow>
     <userTask id="UserTaskSuccessMail" name="Erfolgs-Mail"></userTask>
     <sequenceFlow id="flow50" sourceRef="UserTaskSuccessMail" targetRef="UserTaskRestoreTestSystem"></sequenceFlow>
-    <boundaryEvent id="boundaryerror1" name="Error" attachedToRef="CallActivityRepeatableTestAutomationProcess2SUB1">
+    <boundaryEvent id="boundaryerror1" name="Error" attachedToRef="CallActivityRepeatableTestAutomationProcessSUB1">
       <errorEventDefinition></errorEventDefinition>
     </boundaryEvent>
-    <boundaryEvent id="boundaryerror2" name="Error" attachedToRef="CallActivityRepeatableTestAutomationProcess2SUB2">
+    <boundaryEvent id="boundaryerror2" name="Error" attachedToRef="CallActivityRepeatableTestAutomationProcessSUB2">
       <errorEventDefinition></errorEventDefinition>
     </boundaryEvent>
     <sequenceFlow id="flow51" sourceRef="boundaryerror2" targetRef="UserTaskFailureMail"></sequenceFlow>
@@ -55,13 +54,13 @@
       <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
         <omgdc:Bounds height="35.0" width="35.0" x="40.0" y="243.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="CallActivityRepeatableTestAutomationProcess2SUB1" id="BPMNShape_CallActivityRepeatableTestAutomationProcess2SUB1">
+      <bpmndi:BPMNShape bpmnElement="CallActivityRepeatableTestAutomationProcessSUB1" id="BPMNShape_CallActivityRepeatableTestAutomationProcessSUB1">
         <omgdc:Bounds height="82.0" width="182.0" x="359.0" y="57.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="boundaryerror1" id="BPMNShape_boundaryerror1">
         <omgdc:Bounds height="30.0" width="30.0" x="520.0" y="110.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="CallActivityRepeatableTestAutomationProcess2SUB2" id="BPMNShape_CallActivityRepeatableTestAutomationProcess2SUB2">
+      <bpmndi:BPMNShape bpmnElement="CallActivityRepeatableTestAutomationProcessSUB2" id="BPMNShape_CallActivityRepeatableTestAutomationProcessSUB2">
         <omgdc:Bounds height="82.0" width="181.0" x="360.0" y="220.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="boundaryerror2" id="BPMNShape_boundaryerror2">

@@ -10,6 +10,23 @@
         <connection>scm:git:ssh://git@git.creditreform.de/cte/CTE/activiti-process/</connection>
         <developerConnection>scm:git:ssh://git@git.creditreform.de/cte/CTE/activiti-process/</developerConnection>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>fug-nexus</id>
+            <url>https://vvchub.creditreform.de:8443/repository/cte-release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>fug-nexus</id>
+            <url>https://vvchub.creditreform.de:8443/repository/cte-snapshot/</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>fug-nexus</id>
+            <url>https://vvchub.creditreform.de:8443/repository/cte-public/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

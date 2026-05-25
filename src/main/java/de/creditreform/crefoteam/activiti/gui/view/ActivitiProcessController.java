@@ -191,7 +191,6 @@ public class ActivitiProcessController {
     private Map<String, Object> buildProcessParams(String meinKey) {
         Map<String, Object> params = new HashMap<>();
         params.put(ActivitProcessConstants.UT_TASK_PARAM_NAME_MEIN_KEY, meinKey);
-        params.put(ActivitProcessConstants.UT_TASK_PARAM_NAME_TEST_TYPE, "PHASE1_AND_PHASE2");
         params.put("TIME_BEFORE_BTLG_IMPORT", "0");
         params.put("TIME_BEFORE_CT_IMPORT", "0");
         params.put("TIME_BEFORE_EXPORT", "0");

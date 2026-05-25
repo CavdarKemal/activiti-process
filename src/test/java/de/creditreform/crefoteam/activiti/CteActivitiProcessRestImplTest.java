@@ -106,10 +106,9 @@ public class CteActivitiProcessRestImplTest {
 
         Map<String, String> variables = new HashMap<>();
         variables.put("MEIN_KEY", "ENE");
-        variables.put("TEST_TYPE", "PHASE2_ONLY");
         process.setVariables(variables);
 
-        assertEquals(2, process.getVariables().size());
+        assertEquals(1, process.getVariables().size());
         assertEquals("ENE", process.getVariables().get("MEIN_KEY"));
     }
 

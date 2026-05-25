@@ -38,8 +38,8 @@ public class RestIntegrationTestBase {
         LOGGER.info(this.getClass().getSimpleName() + "#setUp:: Lösche Deployments ENE-Junit*");
         cleanDeployments("ENE-Junit");
 
-        LOGGER.info(this.getClass().getSimpleName() + "#setUp:: Lösche Deployments AUTOMATED*");
-        cleanDeployments("AUTOMATED");
+        LOGGER.info(this.getClass().getSimpleName() + "#setUp:: Lösche Deployments JUNIT*");
+        cleanDeployments("JUNIT");
     }
 
     @After
@@ -50,8 +50,8 @@ public class RestIntegrationTestBase {
         LOGGER.info(this.getClass().getSimpleName() + "#tearDown:: Lösche Deployments ENE-Junit*");
         cleanDeployments("ENE-Junit");
 
-        LOGGER.info(this.getClass().getSimpleName() + "#tearDown:: Lösche Deployments AUTOMATED*");
-        cleanDeployments("AUTOMATED");
+        LOGGER.info(this.getClass().getSimpleName() + "#tearDown:: Lösche Deployments JUNIT*");
+        cleanDeployments("JUNIT");
     }
 
     private void cleanDeployments(String nameLike) {

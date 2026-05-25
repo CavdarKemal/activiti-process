@@ -15,20 +15,29 @@ import static de.creditreform.crefoteam.activiti.ActivitiJunitConstants.*;
 public class CteActivitiRestServiceIntegration1Test extends RestIntegrationTestBase {
     @Test
     public void testListCteActivitiDeployments() throws Exception {
-        String deploymentNameLike = "JunitAutomated";
+        String envName = "JUNIT";
+        String deploymentNameLike = envName + "-CteAutomated";
         List<CteActivitiDeployment> cteActivitiDeploymentList = cteActivitiServiceREST.listDeploymentsForNameLike(deploymentNameLike);
         Assert.assertNotNull(cteActivitiDeploymentList);
         Assert.assertTrue(cteActivitiDeploymentList.isEmpty());
 
-        cteActivitiServiceREST.uploadDeploymentFile(new File(getClass().getResource("/" + AUTOMATED_MAIN_DEPLOYMENT_NAME).toURI()));
-        cteActivitiServiceREST.uploadDeploymentFile(new File(getClass().getResource("/" + AUTOMATED_SUB_RT_DEPLOYMENT_NAME).toURI()));
+        File mainBpmn = cteActivitiServiceREST.prepareBpmnFileForEnvironment(
+                getClass().getClassLoader().getResource("bpmns/CteAutomatedTestProcess.bpmn").getPath(), envName);
+        File subBpmn = cteActivitiServiceREST.prepareBpmnFileForEnvironment(
+                getClass().getClassLoader().getResource("bpmns/CteAutomatedTestProcessSUB.bpmn").getPath(), envName);
+        String mainDeploymentName = mainBpmn.getName();
+        String subDeploymentName = subBpmn.getName();
+        cteActivitiServiceREST.uploadDeploymentFile(mainBpmn);
+        cteActivitiServiceREST.uploadDeploymentFile(subBpmn);
+        mainBpmn.delete();
+        subBpmn.delete();
 
         cteActivitiDeploymentList = cteActivitiServiceREST.listDeploymentsForNameLike(deploymentNameLike);
         Assert.assertNotNull(cteActivitiDeploymentList);
         Assert.assertFalse(cteActivitiDeploymentList.isEmpty());
 
-        cteActivitiServiceREST.deleteDeploymentForName(AUTOMATED_MAIN_DEPLOYMENT_NAME);
-        cteActivitiServiceREST.deleteDeploymentForName(AUTOMATED_SUB_RT_DEPLOYMENT_NAME);
+        cteActivitiServiceREST.deleteDeploymentForName(mainDeploymentName);
+        cteActivitiServiceREST.deleteDeploymentForName(subDeploymentName);
         cteActivitiDeploymentList = cteActivitiServiceREST.listDeploymentsForNameLike(deploymentNameLike);
         Assert.assertNotNull(cteActivitiDeploymentList);
         Assert.assertTrue(cteActivitiDeploymentList.isEmpty());

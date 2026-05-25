@@ -403,7 +403,6 @@ service.uploadDeploymentFile(subBpmn);
 ```java
 Map<String, Object> params = new HashMap<>();
 params.put("MEIN_KEY",  "ENE");
-params.put("TEST_TYPE", "PHASE1_AND_PHASE2");
 
 CteActivitiProcess process = service.startProcess(
     "ENE-TestAutomationProcess",
@@ -518,7 +517,6 @@ while (running) {
 ```java
 Map<String, Object> startVars = new HashMap<>();
 startVars.put("MEIN_KEY",  "ENE");
-startVars.put("TEST_TYPE", "PHASE1_AND_PHASE2");
 startVars.put("TIMEOUT",   "PT30S");
 
 service.startProcess("ENE-TestAutomationProcess", startVars);
@@ -541,7 +539,6 @@ CteActivitiTask task = service.selectTaskForBusinessKey(processId, "ENE");
 Map<String, String> vars = task.getVariables();
 
 String meinKey = vars.get("MEIN_KEY");
-String testType = vars.get("TEST_TYPE");
 ```
 
 ### Variablen per REST lesen

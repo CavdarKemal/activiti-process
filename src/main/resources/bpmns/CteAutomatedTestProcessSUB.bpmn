@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
-  <process id="%ENV%TestAutomationProcessRT2SUB" name="CTE %ENV%-Teil-Test-Automatisierung2Sub" isExecutable="true">
+  <process id="%ENV%TestAutomationProcessSUB" name="CTE %ENV%-Teil-Test-AutomatisierungSub" isExecutable="true">
     <startEvent id="startEvent" name="Start" activiti:initiator="initiator"></startEvent>
     <endEvent id="endEvent" name="End"></endEvent>
     <userTask id="UserTaskStartBeteiligtenImport" name="Beteiligten-Import starten [StartBeteiligtenImport]"></userTask>
@@ -45,8 +45,8 @@
     <sequenceFlow id="flow23" sourceRef="UserTaskWaitBeforeExport" targetRef="UserTaskStartExports"></sequenceFlow>
     <sequenceFlow id="flow24" sourceRef="UserTaskCheckSftpUploads" targetRef="endEvent"></sequenceFlow>
   </process>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_%ENV%TestAutomationProcessRT2SUB">
-    <bpmndi:BPMNPlane bpmnElement="%ENV%TestAutomationProcessRT2SUB" id="BPMNPlane_%ENV%TestAutomationProcessRT2SUB">
+  <bpmndi:BPMNDiagram id="BPMNDiagram_%ENV%TestAutomationProcessSUB">
+    <bpmndi:BPMNPlane bpmnElement="%ENV%TestAutomationProcessSUB" id="BPMNPlane_%ENV%TestAutomationProcessSUB">
       <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
         <omgdc:Bounds height="35.0" width="35.0" x="100.0" y="48.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>

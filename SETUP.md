@@ -128,8 +128,7 @@ curl -u kermit:kermit -X POST \
   -d '{
     "processDefinitionKey": "ENE-TestAutomationProcess",
     "variables": [
-      {"name": "MEIN_KEY",   "value": "meinSchluessel"},
-      {"name": "TEST_TYPE",  "value": "PHASE1_AND_PHASE2"}
+      {"name": "MEIN_KEY",   "value": "meinSchluessel"}
     ]
   }' \
   http://localhost:9091/activiti-rest/service/runtime/process-instances
